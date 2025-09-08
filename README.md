@@ -1,4 +1,4 @@
-# gopro-data-project
+# GoPro Telemetry Analysis
 
 ## System Architecture
 
