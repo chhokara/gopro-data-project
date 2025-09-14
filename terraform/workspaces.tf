@@ -10,19 +10,27 @@ terraform {
 provider "tfe" {
     token = var.tfc_api_token
 }
-data "tfe_github_installation" "this" {
-    name = "chhokara"
+
+resource "tfe_organization" "gopro-data-org" {
+    name = "gopro-data-org"
+    email = var.tfc_email
 }
 
-resource "tfe_workspace" "gopro_data_project" {
-    name         = "gopro-data-project"
-    organization = "gopro-data-project"
-    description  = "A workspace for the GoPro Data Project"
+resource "tfe_oauth_client" "github-oauth-client" {
+    organization = tfe_organization.gopro-data-org.name
+    api_url = "https://api.github.com"
+    http_url = "https://github.com"
+    oauth_token = var.github_oauth_token_id
+    service_provider = "github"
+}
 
+resource "tfe_workspace" "gopro-data-workspace" {
+    name = "gopro-data-workspace"
+    organization = tfe_organization.gopro-data-org.name
+    queue_all_runs = false
     vcs_repo {
-        identifier     = "chhokara/gopro-data-project"
-        branch         = "main"
-        github_app_installation_id = data.tfe_github_installation.this.id
-        ingress_submodules = false
+        branch = "main"
+        identifier = "chhokara/gopro-data-project"
+        oauth_token_id = tfe_oauth_client.github-oauth-client.oauth_token
     }
 }
