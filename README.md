@@ -7,3 +7,15 @@ This project implements a serverless data pipeline to extract and visualize tele
 ## System Architecture
 
 ![System Architecture](assets/architecture.png)
+
+## Technologies
+
+- GoPro (GPMF Telemetry)
+- Amazon S3
+- Amazon EventBridge
+- AWS Batch (Fargate)
+- Amazon ECR
+- Docker
+- Amazon Athena
+- Grafana
+- Terraform
