@@ -12,7 +12,7 @@ provider "tfe" {
 }
 
 resource "tfe_organization" "gopro-data-org" {
-    name = "gopro-data"
+    name = "gopro-data-org"
     email = var.tfc_email
 }
 
