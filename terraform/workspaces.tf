@@ -5,6 +5,14 @@ terraform {
             version = "~> 0.50"
         }
     }
+
+    cloud {
+        organization = "gopro-data-org"
+        
+        workspaces {
+            name = "gopro-data-workspace"
+        }
+    }
 }
 
 provider "tfe" {
