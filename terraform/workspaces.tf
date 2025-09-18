@@ -16,6 +16,7 @@ resource "tfe_organization" "gopro-data-org" {
     email = var.tfc_email
 }
 
+## trigger run
 resource "tfe_workspace" "gopro-data-workspace" {
     name = "gopro-data-ws"
     organization = tfe_organization.gopro-data-org.name
