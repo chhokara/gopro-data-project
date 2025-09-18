@@ -11,15 +11,14 @@ provider "tfe" {
     token = var.tfc_api_token
 }
 
-resource "tfe_organization" "gopro-data-org" {
+data "tfe_organization" "gopro-data-org" {
     name = "gopro-data-org"
-    email = var.tfc_email
 }
 
 ## trigger run
 resource "tfe_workspace" "gopro-data-workspace" {
-    name = "gopro-data-ws"
-    organization = tfe_organization.gopro-data-org.name
+    name = "gopro-data-workspace"
+    organization = data.tfe_organization.gopro-data-org.name
     queue_all_runs = false
     working_directory = "./terraform"
     auto_apply = true
