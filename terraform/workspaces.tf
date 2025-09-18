@@ -15,7 +15,6 @@ data "tfe_organization" "gopro-data-org" {
     name = "gopro-data-org"
 }
 
-## trigger run
 resource "tfe_workspace" "gopro-data-workspace" {
     name = "gopro-data-workspace"
     organization = data.tfe_organization.gopro-data-org.name
