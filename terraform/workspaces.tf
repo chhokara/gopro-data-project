@@ -19,8 +19,9 @@ provider "tfe" {
     token = var.tfc_api_token
 }
 
-data "tfe_organization" "gopro-data-org" {
+resource "tfe_organization" "gopro-data-org" {
     name = "gopro-data-org"
+    email = var.tfc_email
 }
 
 resource "tfe_workspace" "gopro-data-workspace" {
