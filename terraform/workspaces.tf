@@ -25,7 +25,7 @@ resource "tfe_organization" "gopro-data-org" {
 }
 
 resource "tfe_workspace" "gopro-data-workspace" {
-    name = "gopro-data-ws"
+    name = "gopro-data-workspace"
     organization = tfe_organization.gopro-data-org.name
     queue_all_runs = false
     working_directory = "./terraform"
