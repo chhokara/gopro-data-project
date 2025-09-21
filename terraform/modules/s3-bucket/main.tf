@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "gopro_data" {
-    bucket = var.s3_bucket_name
-    force_destroy = var.s3_force_destroy
+    bucket = var.bucket_name
+    force_destroy = var.force_destroy
 
     tags = var.common_tags
 }
