@@ -31,3 +31,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "gopro_data_encryp
         }
     }
 }
+
+resource "aws_s3_bucket_notification" "gopro_data_notification" {
+    bucket = aws_s3_bucket.gopro_data.id
+    eventbridge = true
+}
