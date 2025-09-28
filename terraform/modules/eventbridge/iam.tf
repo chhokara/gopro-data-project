@@ -24,8 +24,8 @@ resource "aws_iam_role" "eventbridge_to_batch" {
 #         sid = "AllowPassRolesForBatch"
 #         actions = ["iam:PassRole"]
 #         resources = [
-#             var.batch_job_role_arn,
-#             var.batch_execution_role_arn
+#             module.batch.batch_job_role_arn,
+#             module.batch.batch_execution_role_arn
 #         ]
 #     }
 # }
