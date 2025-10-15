@@ -1,7 +1,7 @@
 resource "aws_security_group" "batch" {
     name = "gopro-batch-sg"
     description = "Security group for AWS Batch"
-    vpc_id = module.vpc.vpc_id
+    vpc_id = var.vpc_id
 
     egress {
         from_port = 0
@@ -23,7 +23,7 @@ resource "aws_batch_compute_environment" "this" {
     compute_resources {
         type = "FARGATE"
         max_vcpus = 64
-        subnets = module.vpc.private_subnet_ids
+        subnets = var.private_subnet_ids
         security_group_ids = [aws_security_group.batch.id]
     }
 }

@@ -1,11 +1,11 @@
+variable "vpc_id" {
+  description = "VPC ID for the Batch compute environment"
+  type        = string
+}
+
 variable "subnet_ids" {
   description = "Private subnet IDs for the Batch compute environment"
   type        = list(string)
-}
-
-variable "security_group_id" {
-  description = "Security group ID for the Batch compute environment"
-  type        = string
 }
 
 variable "job_image" {
