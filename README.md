@@ -6,7 +6,7 @@ This project implements a serverless data pipeline on Google Cloud Platform (GCP
 
 ## System Architecture
 
-![System Architecture](assets/architecture-gcs.png)
+![System Architecture](assets/architecture-gcp.png)
 
 ## Technologies
 
