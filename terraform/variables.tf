@@ -15,8 +15,23 @@ variable "github_oauth_token_id" {
   sensitive   = true
 }
 
-variable "aws_region" {
-  description = "AWS Region"
+variable "gcp_project_id" {
+  description = "GCP Project ID"
   type        = string
-  default     = "us-west-2"
+}
+
+variable "gcp_region" {
+  description = "GCP Region"
+  type        = string
+}
+
+variable "gcp_zone" {
+  description = "GCP Zone"
+  type        = string
+}
+
+variable "google_credentials_base64" {
+  description = "Base64 encoded Google Cloud credentials JSON"
+  type        = string
+  sensitive   = true
 }
