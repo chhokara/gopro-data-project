@@ -1,6 +1,6 @@
 module "raw_bucket" {
   source            = "./modules/gcs-bucket"
-  name              = "raw-data-bucket"
+  name              = "gopro-raw-data-bucket"
   project_id        = "gopro-data-project"
   autoclass_enabled = true
   lifecycle_rules = [
