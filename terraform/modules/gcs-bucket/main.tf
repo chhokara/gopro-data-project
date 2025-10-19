@@ -55,7 +55,7 @@ resource "google_storage_bucket_iam_member" "this" {
 }
 
 resource "google_storage_notification" "this" {
-  count              = var.notification ? 1 : 0
+  count              = var.notification != null ? 1 : 0
   bucket             = google_storage_bucket.this.name
   topic              = var.notification.topic
   payload_format     = coalesce(var.notification.payload_format, "JSON_API_V1")
