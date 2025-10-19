@@ -80,22 +80,22 @@ variable "labels" {
   default     = {}
 }
 
-variable "iam_bindings" {
-  description = "A list of IAM bindings to apply to the bucket."
-  type        = list(object({
-    role    = string
-    members = list(string)
+variable "iam_members" {
+  description = "A list of IAM members to bind to the bucket."
+  type = list(object({
+      role   = string
+      member = string
   }))
-  default     = []
+  default = []
 }
 
 variable "notification" {
-    description = "Pub/sub notification configuration for the bucket."
-    type = list(object({
-        topic          = string
-        payload_format = string
-        event_types    = optional(list(string))
-        object_name_prefix = optional(string)
-    }))
-    default = []
+  description = "Optional Pub/Sub notification config"
+  type = object({
+    topic             = string                    
+    payload_format    = optional(string)          
+    event_types       = optional(list(string))  
+    object_name_prefix = optional(string)
+  })
+  default = null
 }
