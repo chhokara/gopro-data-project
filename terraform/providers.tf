@@ -23,9 +23,4 @@ provider "tfe" {
   token = var.tfc_api_token
 }
 
-provider "google" {
-  project = var.gcp_project_id
-  region  = var.gcp_region
-  zone    = var.gcp_zone
-  credentials = base64decode(var.google_credentials_base64)
-}
+provider "google" {}
