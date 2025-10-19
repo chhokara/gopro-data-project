@@ -58,7 +58,7 @@ variable "versioning_enabled" {
 
 variable "lifecycle_rules" {
   description = "A list of lifecycle rules to apply to the bucket."
-  type        = list(object({
+  type = list(object({
     action = object({
       type          = string
       storage_class = optional(string)
@@ -71,7 +71,7 @@ variable "lifecycle_rules" {
       matches_storage_class = optional(list(string))
     })
   }))
-  default     = []
+  default = []
 }
 
 variable "labels" {
@@ -83,8 +83,8 @@ variable "labels" {
 variable "iam_members" {
   description = "A list of IAM members to bind to the bucket."
   type = list(object({
-      role   = string
-      member = string
+    role   = string
+    member = string
   }))
   default = []
 }
@@ -92,9 +92,9 @@ variable "iam_members" {
 variable "notification" {
   description = "Optional Pub/Sub notification config"
   type = object({
-    topic             = string                    
-    payload_format    = optional(string)          
-    event_types       = optional(list(string))  
+    topic              = string
+    payload_format     = optional(string)
+    event_types        = optional(list(string))
     object_name_prefix = optional(string)
   })
   default = null
