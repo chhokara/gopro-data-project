@@ -14,24 +14,3 @@ variable "github_oauth_token_id" {
   type        = string
   sensitive   = true
 }
-
-variable "gcp_project_id" {
-  description = "GCP Project ID"
-  type        = string
-}
-
-variable "gcp_region" {
-  description = "GCP Region"
-  type        = string
-}
-
-variable "gcp_zone" {
-  description = "GCP Zone"
-  type        = string
-}
-
-variable "google_credentials_base64" {
-  description = "Base64 encoded Google Cloud credentials JSON"
-  type        = string
-  sensitive   = true
-}
