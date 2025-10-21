@@ -61,4 +61,6 @@ resource "google_storage_notification" "this" {
   payload_format     = coalesce(var.notification.payload_format, "JSON_API_V1")
   event_types        = coalesce(var.notification.event_types, ["OBJECT_FINALIZE"])
   object_name_prefix = lookup(var.notification, "object_name_prefix", null)
+
+  depends_on = [google_pubsub_topic_iam_member.this]
 }
