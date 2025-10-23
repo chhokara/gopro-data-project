@@ -1,8 +1,8 @@
 module "pubsub" {
-  source                = "./modules/pubsub"
-  project_id            = "gopro-data-project"
-  topic_name            = "gopro-data-topic"
-  subscription_name     = "gopro-data-subscription"
+  source            = "./modules/pubsub"
+  project_id        = "gopro-data-project"
+  topic_name        = "gopro-data-topic"
+  subscription_name = "gopro-data-subscription"
   # subscriber_service_account = "service-account-email"
 }
 
@@ -27,9 +27,9 @@ module "raw_bucket" {
     project     = "gopro-data"
   }
   notification = {
-    topic = module.pubsub.pubsub_topic
-    payload_format = "JSON_API_V1"
-    event_types = ["OBJECT_FINALIZE"]
+    topic              = module.pubsub.pubsub_topic
+    payload_format     = "JSON_API_V1"
+    event_types        = ["OBJECT_FINALIZE"]
     object_name_prefix = "raw/"
   }
 
