@@ -19,12 +19,6 @@ resource "google_storage_bucket" "dags" {
   }
 }
 
-locals {
-  dag_prefix        = "dags"
-  plugins_prefix    = "plugins"
-  requirements_file = "requirements/requirements.txt"
-}
-
 resource "google_storage_bucket_iam_member" "sa_read_raw" {
   bucket = var.raw_bucket_name
   role   = "roles/storage.objectViewer"
