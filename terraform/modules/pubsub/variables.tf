@@ -13,7 +13,7 @@ variable "subscription_name" {
   type        = string
 }
 
-# variable "subscriber_service_account" {
-#   description = "The service account email to be granted subscriber role."
-#   type        = string
-# }   
+variable "subscriber_service_account" {
+  description = "The service account email to be granted subscriber role."
+  type        = string
+}
