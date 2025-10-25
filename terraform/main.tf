@@ -119,7 +119,7 @@ module "composer" {
 }
 
 resource "google_pubsub_subscription_iam_member" "this" {
-  project      = var.project_id
+  project      = local.project_id
   subscription = module.pubsub.pubsub_subscription
   role         = "roles/pubsub.subscriber"
   member       = "serviceAccount:${module.composer.composer_sa_email}"
