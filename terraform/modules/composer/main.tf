@@ -105,10 +105,10 @@ resource "google_composer_environment" "this" {
       subnetwork      = var.subnetwork
       service_account = google_service_account.composer_sa.email
     }
+  }
 
-    storage_config {
-      bucket = google_storage_bucket.dags.name
-    }
+  storage_config {
+    bucket = google_storage_bucket.dags.name
   }
 
   depends_on = [
