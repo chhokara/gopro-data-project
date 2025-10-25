@@ -63,7 +63,7 @@ resource "google_composer_environment" "this" {
 
   config {
     software_config {
-      image_version            = var.composer_image_version
+      image_version            = var.image_version
       airflow_config_overrides = var.airflow_config_overrides
       env_variables = merge({
         RAW_BUCKET     = var.raw_bucket_name
