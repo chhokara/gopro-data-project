@@ -122,7 +122,7 @@ resource "google_pubsub_subscription_iam_member" "this" {
   project      = var.project_id
   subscription = module.pubsub.pubsub_subscription
   role         = "roles/pubsub.subscriber"
-  member       = "serviceAccount:${module.composer.service_account_email}"
+  member       = "serviceAccount:${module.composer.composer_sa_email}"
 
   depends_on = [module.pubsub, module.composer, google_project_service.required_services]
 }
