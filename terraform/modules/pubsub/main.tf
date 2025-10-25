@@ -35,3 +35,10 @@ resource "google_pubsub_topic_iam_member" "this" {
 
   depends_on = [google_pubsub_topic.this]
 }
+
+resource google_project_service pubsub {
+  project = var.project_id
+  service = "pubsub.googleapis.com"
+
+  disable_dependent_services = true
+}

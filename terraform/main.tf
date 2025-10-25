@@ -87,14 +87,14 @@ resource "google_project_service" "required_services" {
 #   depends_on = [google_project_service.required_services]
 # }
 
-# module "pubsub" {
-#   source            = "./modules/pubsub"
-#   project_id        = local.project_id
-#   topic_name        = "gopro-data-topic"
-#   subscription_name = "gopro-data-subscription"
+module "pubsub" {
+  source            = "./modules/pubsub"
+  project_id        = local.project_id
+  topic_name        = "gopro-data-topic"
+  subscription_name = "gopro-data-subscription"
 
-#   depends_on = [google_project_service.required_services]
-# }
+  depends_on = [google_project_service.required_services]
+}
 
 # module "composer" {
 #   source           = "./modules/composer"
