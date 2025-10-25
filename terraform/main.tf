@@ -1,23 +1,23 @@
-locals {
-  required_services = [
-    "compute.googleapis.com",
-    "storage.googleapis.com",
-    "pubsub.googleapis.com",
-    "bigquery.googleapis.com",
-    "composer.googleapis.com",
-    "artifactregistry.googleapis.com",
-  ]
-  project_id = "gopro-data-project"
-  region     = "us-central1"
-}
+# locals {
+#   required_services = [
+#     "compute.googleapis.com",
+#     "storage.googleapis.com",
+#     "pubsub.googleapis.com",
+#     "bigquery.googleapis.com",
+#     "composer.googleapis.com",
+#     "artifactregistry.googleapis.com",
+#   ]
+#   project_id = "gopro-data-project"
+#   region     = "us-central1"
+# }
 
-resource "google_project_service" "required_services" {
-  for_each = toset(local.required_services)
-  project  = local.project_id
-  service  = each.key
+# resource "google_project_service" "required_services" {
+#   for_each = toset(local.required_services)
+#   project  = local.project_id
+#   service  = each.key
 
-  disable_dependent_services = true
-}
+#   disable_dependent_services = true
+# }
 
 # module "raw_bucket" {
 #   source            = "./modules/gcs-bucket"
@@ -87,14 +87,14 @@ resource "google_project_service" "required_services" {
 #   depends_on = [google_project_service.required_services]
 # }
 
-module "pubsub" {
-  source            = "./modules/pubsub"
-  project_id        = local.project_id
-  topic_name        = "gopro-data-topic"
-  subscription_name = "gopro-data-subscription"
+# module "pubsub" {
+#   source            = "./modules/pubsub"
+#   project_id        = local.project_id
+#   topic_name        = "gopro-data-topic"
+#   subscription_name = "gopro-data-subscription"
 
-  depends_on = [google_project_service.required_services]
-}
+#   depends_on = [google_project_service.required_services]
+# }
 
 # module "composer" {
 #   source           = "./modules/composer"
