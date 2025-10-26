@@ -1,15 +1,15 @@
-# locals {
-#   required_services = [
-#     "compute.googleapis.com",
-#     "storage.googleapis.com",
-#     "pubsub.googleapis.com",
-#     "bigquery.googleapis.com",
-#     "composer.googleapis.com",
-#     "artifactregistry.googleapis.com",
-#   ]
-#   project_id = "gopro-data-project"
-#   region     = "us-central1"
-# }
+locals {
+  required_services = [
+    "compute.googleapis.com",
+    "storage.googleapis.com",
+    "pubsub.googleapis.com",
+    "bigquery.googleapis.com",
+    "composer.googleapis.com",
+    "artifactregistry.googleapis.com",
+  ]
+  project_id = "gopro-data-project"
+  region     = "us-central1"
+}
 
 # resource "google_project_service" "required_services" {
 #   for_each = toset(local.required_services)
