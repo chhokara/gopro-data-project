@@ -75,7 +75,7 @@ module "curated_bucket" {
 
 module "dags_bucket" {
   source            = "./modules/gcs-bucket"
-  name              = "gopro-composer-dags-bucket"
+  name              = "gopro-data-dags-bucket"
   project_id        = local.project_id
   autoclass_enabled = false
   labels = {
