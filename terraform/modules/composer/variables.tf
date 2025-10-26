@@ -104,5 +104,5 @@ variable "airflow_env_vars" {
 variable "airflow_config_overrides" {
   description = "A map of Airflow configuration overrides."
   type        = map(string)
-  default     = { "core-load_examples" = "False" }
+  default     = {}
 }
