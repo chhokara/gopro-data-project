@@ -19,73 +19,79 @@ resource "google_project_service" "required_services" {
   disable_dependent_services = true
 }
 
-module "raw_bucket" {
-  source            = "./modules/gcs-bucket"
-  name              = "gopro-raw-data-bucket"
-  project_id        = "gopro-data-project"
-  autoclass_enabled = true
-  lifecycle_rules = [
-    {
-      action = {
-        type = "Delete"
-      }
-      condition = {
-        age = 30
-      }
-    }
-  ]
-  labels = {
-    environment = "dev"
-    layer       = "raw"
-    project     = "gopro-data"
-  }
-  notification = {
-    topic              = module.pubsub.pubsub_topic
-    payload_format     = "JSON_API_V1"
-    event_types        = ["OBJECT_FINALIZE"]
-    object_name_prefix = "raw/"
-  }
+# module "raw_bucket" {
+#   source            = "./modules/gcs-bucket"
+#   name              = "gopro-raw-data-bucket"
+#   project_id        = "gopro-data-project"
+#   autoclass_enabled = true
+#   lifecycle_rules = [
+#     {
+#       action = {
+#         type = "Delete"
+#       }
+#       condition = {
+#         age = 30
+#       }
+#     }
+#   ]
+#   labels = {
+#     environment = "dev"
+#     layer       = "raw"
+#     project     = "gopro-data"
+#   }
+#   notification = {
+#     topic              = module.pubsub.pubsub_topic
+#     payload_format     = "JSON_API_V1"
+#     event_types        = ["OBJECT_FINALIZE"]
+#     object_name_prefix = "raw/"
+#   }
 
-  depends_on = [module.pubsub, google_project_service.required_services]
-}
+#   force_destroy = true
 
-module "curated_bucket" {
-  source            = "./modules/gcs-bucket"
-  name              = "gopro-curated-data-bucket"
-  project_id        = local.project_id
-  autoclass_enabled = true
-  lifecycle_rules = [
-    {
-      action = {
-        type = "Delete"
-      }
-      condition = {
-        age = 90
-      }
-    }
-  ]
-  labels = {
-    environment = "dev"
-    layer       = "curated"
-    project     = "gopro-data"
-  }
+#   depends_on = [module.pubsub, google_project_service.required_services]
+# }
 
-  depends_on = [google_project_service.required_services]
-}
+# module "curated_bucket" {
+#   source            = "./modules/gcs-bucket"
+#   name              = "gopro-curated-data-bucket"
+#   project_id        = local.project_id
+#   autoclass_enabled = true
+#   lifecycle_rules = [
+#     {
+#       action = {
+#         type = "Delete"
+#       }
+#       condition = {
+#         age = 90
+#       }
+#     }
+#   ]
+#   labels = {
+#     environment = "dev"
+#     layer       = "curated"
+#     project     = "gopro-data"
+#   }
 
-module "dags_bucket" {
-  source            = "./modules/gcs-bucket"
-  name              = "gopro-data-dags-bucket"
-  project_id        = local.project_id
-  autoclass_enabled = false
-  labels = {
-    environment = "dev"
-    project     = "gopro-data"
-    purpose     = "composer-dags"
-  }
+#   force_destroy = true
 
-  depends_on = [google_project_service.required_services]
-}
+#   depends_on = [google_project_service.required_services]
+# }
+
+# module "dags_bucket" {
+#   source            = "./modules/gcs-bucket"
+#   name              = "gopro-composer-dags-bucket"
+#   project_id        = local.project_id
+#   autoclass_enabled = false
+#   labels = {
+#     environment = "dev"
+#     project     = "gopro-data"
+#     purpose     = "composer-dags"
+#   }
+
+#   force_destroy = true
+
+#   depends_on = [google_project_service.required_services]
+# }
 
 module "pubsub" {
   source            = "./modules/pubsub"
