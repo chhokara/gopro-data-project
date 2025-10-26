@@ -1,44 +1,37 @@
-# data "google_project" "current" {
-#   project_id = var.project_id
-# }
+data "google_project" "current" {
+  project_id = var.project_id
+}
 
-# locals {
-#   gcs_publisher_sa = "serviceAccount:service-${data.google_project.current.number}@gs-project-accounts.iam.gserviceaccount.com"
-# }
+locals {
+  gcs_publisher_sa = "serviceAccount:service-${data.google_project.current.number}@gs-project-accounts.iam.gserviceaccount.com"
+}
 
-# resource "google_pubsub_topic" "this" {
-#   project = var.project_id
-#   name    = var.topic_name
-# }
-
-# resource "google_pubsub_subscription" "this" {
-#   project = var.project_id
-#   name    = var.subscription_name
-#   topic   = google_pubsub_topic.this.name
-
-#   ack_deadline_seconds       = 30
-#   message_retention_duration = "1200s"
-#   retain_acked_messages      = false
-
-#   expiration_policy {
-#     ttl = ""
-#   }
-
-#   depends_on = [google_pubsub_topic.this]
-# }
-
-# resource "google_pubsub_topic_iam_member" "this" {
-#   project = var.project_id
-#   topic   = google_pubsub_topic.this.name
-#   role    = "roles/pubsub.publisher"
-#   member  = local.gcs_publisher_sa
-
-#   depends_on = [google_pubsub_topic.this]
-# }
-
-resource google_project_service pubsub {
+resource "google_pubsub_topic" "this" {
   project = var.project_id
-  service = "pubsub.googleapis.com"
+  name    = var.topic_name
+}
 
-  disable_dependent_services = true
+resource "google_pubsub_subscription" "this" {
+  project = var.project_id
+  name    = var.subscription_name
+  topic   = google_pubsub_topic.this.name
+
+  ack_deadline_seconds       = 30
+  message_retention_duration = "1200s"
+  retain_acked_messages      = false
+
+  expiration_policy {
+    ttl = ""
+  }
+
+  depends_on = [google_pubsub_topic.this]
+}
+
+resource "google_pubsub_topic_iam_member" "this" {
+  project = var.project_id
+  topic   = google_pubsub_topic.this.name
+  role    = "roles/pubsub.publisher"
+  member  = local.gcs_publisher_sa
+
+  depends_on = [google_pubsub_topic.this]
 }
