@@ -3,22 +3,6 @@ resource "google_service_account" "composer_sa" {
   display_name = "Composer Service Account for ${var.environment_name}"
 }
 
-resource "google_storage_bucket" "dags" {
-  name                        = var.dags_bucket_name
-  location                    = var.region
-  uniform_bucket_level_access = true
-  force_destroy               = true
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      age = 60
-    }
-  }
-}
-
 resource "google_storage_bucket_iam_member" "sa_read_raw" {
   bucket = var.raw_bucket_name
   role   = "roles/storage.objectViewer"
@@ -32,7 +16,7 @@ resource "google_storage_bucket_iam_member" "sa_write_curated" {
 }
 
 resource "google_storage_bucket_iam_member" "sa_read_dags" {
-  bucket = google_storage_bucket.dags.name
+  bucket = var.dags_bucket_name
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_service_account.composer_sa.email}"
 }
@@ -108,7 +92,7 @@ resource "google_composer_environment" "this" {
   }
 
   storage_config {
-    bucket = google_storage_bucket.dags.name
+    bucket = var.dags_bucket_name
   }
 
   depends_on = [
