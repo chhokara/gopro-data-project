@@ -60,7 +60,7 @@ variable "scheduler" {
   default = {
     cpu        = 2
     memory_gb  = 4
-    storage_gb = 32
+    storage_gb = 10
     count      = 1
   }
 }
@@ -74,7 +74,7 @@ variable "web_server" {
   default = {
     cpu        = 2
     memory_gb  = 4
-    storage_gb = 32
+    storage_gb = 10
   }
 }
 
@@ -89,7 +89,7 @@ variable "worker" {
   default = {
     cpu        = 2
     memory_gb  = 8
-    storage_gb = 32
+    storage_gb = 10
     min_count  = 0
     max_count  = 3
   }

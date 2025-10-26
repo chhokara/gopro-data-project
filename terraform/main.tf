@@ -111,10 +111,10 @@ module "composer" {
   network    = "default"
   subnetwork = "default"
 
-  image_version = "composer-2.6.4-airflow-2.8.1"
+  image_version = "composer-2.14.4-airflow-2.10.5"
   airflow_env_vars = {
     REGION              = local.region
-    PROJECT_ID          = local.project_id
+    APP_PROJECT_ID          = local.project_id
     PUBSUB_TOPIC        = module.pubsub.pubsub_topic
     PUBSUB_SUBSCRIPTION = module.pubsub.pubsub_subscription
   }
