@@ -7,5 +7,5 @@ output "composer_sa_email" {
 }
 
 output "dags_bucket_name" {
-  value = google_storage_bucket.dags.name
+  value = google_composer_environment.this.storage_config[0].bucket
 }
