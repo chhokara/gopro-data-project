@@ -1,5 +1,11 @@
 data "google_project" "current" {}
 
+resource "google_project_iam_member" "composer_service_agent_ext" {
+  project = var.project_id
+  role    = "roles/composer.ServiceAgentV2Ext"
+  member  = "serviceAccount:service-${data.google_project.current.number}@cloudcomposer-accounts.iam.gserviceaccount.com"
+}
+
 resource "google_service_account" "composer_sa" {
   account_id   = "${var.environment_name}-composer"
   display_name = "Composer Service Account for ${var.environment_name}"
@@ -102,11 +108,8 @@ resource "google_composer_environment" "this" {
     google_storage_bucket_iam_member.sa_write_curated,
     google_storage_bucket_iam_member.sa_read_dags,
     google_project_iam_member.composer_general_roles,
+    google_project_iam_member.composer_service_agent_ext
   ]
 }
 
-resource "google_project_iam_member" "composer_service_agent_ext" {
-  project = var.project_id
-  role    = "roles/composer.ServiceAgentV2Ext"
-  member  = "serviceAccount:service-${data.google_project.current.number}@cloudcomposer-accounts.iam.gserviceaccount.com"
-}
+
