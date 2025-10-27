@@ -108,5 +108,5 @@ resource "google_composer_environment" "this" {
 resource "google_project_iam_member" "composer_service_agent_ext" {
   project = var.project_id
   role    = "roles/composer.ServiceAgentV2Ext"
-  member  = "serviceAccount:service-${data.google_project.current}@cloudcomposer-accounts.iam.gserviceaccount.com"
+  member  = "serviceAccount:service-${data.google_project.current.number}@cloudcomposer-accounts.iam.gserviceaccount.com"
 }
