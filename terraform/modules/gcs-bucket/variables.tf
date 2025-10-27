@@ -6,7 +6,7 @@ variable "project_id" {
 variable "location" {
   description = "The location where the bucket will be created."
   type        = string
-  default     = "US"
+  default     = "us-central1"
 }
 
 variable "name" {
