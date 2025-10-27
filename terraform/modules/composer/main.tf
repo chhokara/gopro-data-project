@@ -1,3 +1,5 @@
+data "google_project" "current" {}
+
 resource "google_service_account" "composer_sa" {
   account_id   = "${var.environment_name}-composer"
   display_name = "Composer Service Account for ${var.environment_name}"
@@ -103,4 +105,8 @@ resource "google_composer_environment" "this" {
   ]
 }
 
-
+resource "google_project_iam_member" "composer_service_agent_ext" {
+  project = var.project_id
+  role    = "roles/composer.ServiceAgentV2Ext"
+  member  = "serviceAccount:service-${data.google_project.current}@cloudcomposer-accounts.iam.gserviceaccount.com"
+}
