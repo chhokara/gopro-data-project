@@ -42,7 +42,8 @@ resource "google_project_iam_member" "composer_general_roles" {
     "roles/monitoring.metricWriter",
     "roles/compute.viewer",
     "roles/pubsub.subscriber",
-    "roles/pubsub.publisher"
+    "roles/pubsub.publisher",
+    "roles/composer.worker"
   ])
   project = var.project_id
   role    = each.value
@@ -111,5 +112,4 @@ resource "google_composer_environment" "this" {
     google_project_iam_member.composer_service_agent_ext
   ]
 }
-
 
