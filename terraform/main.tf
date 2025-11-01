@@ -139,8 +139,8 @@ resource "google_pubsub_subscription_iam_member" "this" {
 module "artifact_registry" {
   source      = "./modules/artifact-registry"
   project_id  = local.project_id
-  location    = local.region
-  repository_name = "gopro-artifact-repo"
+  repository_id = "gopro-artifact-repo"
+  region    = local.region
   composer_sa_email = module.composer.composer_sa_email
 
   depends_on = [module.composer, google_project_service.required_services]
