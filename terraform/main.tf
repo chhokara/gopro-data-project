@@ -6,6 +6,7 @@ locals {
     "bigquery.googleapis.com",
     "composer.googleapis.com",
     "artifactregistry.googleapis.com",
+    "containeranalysis.googleapis.com",
   ]
   project_id = "gopro-data-project"
   region     = "us-central1"
