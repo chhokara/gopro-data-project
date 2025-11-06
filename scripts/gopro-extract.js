@@ -5,12 +5,12 @@ const storage = new Storage();
 
 (async () => {
   try {
-    const RAW_BUCKET_NAME = process.env.RAW_BUCKET_NAME;
+    const RAW_BUCKET = process.env.RAW_BUCKET;
     const OBJECT_NAME = process.env.OBJECT_NAME;
     const CURATED_BUCKET = process.env.CURATED_BUCKET;
     const OUT_PREFIX = process.env.OUT_PREFIX || "gpmf/";
 
-    if (!RAW_BUCKET_NAME || !OBJECT_NAME || !CURATED_BUCKET) {
+    if (!RAW_BUCKET || !OBJECT_NAME || !CURATED_BUCKET) {
       throw new Error("Missing required environment variables.");
     }
 
@@ -19,14 +19,9 @@ const storage = new Storage();
       process.exit(0);
     }
 
-    console.log(
-      `Starting extraction for gs://${RAW_BUCKET_NAME}/${OBJECT_NAME}`
-    );
+    console.log(`Starting extraction for gs://${RAW_BUCKET}/${OBJECT_NAME}`);
 
-    const [buf] = await storage
-      .bucket(RAW_BUCKET_NAME)
-      .file(OBJECT_NAME)
-      .download();
+    const [buf] = await storage.bucket(RAW_BUCKET).file(OBJECT_NAME).download();
     const uint8Array = new Uint8Array(buf);
 
     const result = await gpmfExtract(uint8Array);
