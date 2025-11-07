@@ -19,8 +19,6 @@ RAW_BUCKET = Variable.get(
     "RAW_BUCKET", default_var="gopro-raw-data-bucket")
 CURATED_BUCKET = Variable.get(
     "CURATED_BUCKET", default_var="gopro-curated-data-bucket")
-PUBSUB_TOPIC = Variable.get(
-    "PUBSUB_TOPIC", default_var="gopro-data-topic")
 PUBSUB_SUBSCRIPTION = Variable.get(
     "PUBSUB_SUBSCRIPTION", default_var="gopro-data-subscription")
 REGION = Variable.get(
@@ -52,10 +50,36 @@ with DAG(
     tags=["gopro", "gpmf", "extraction", "gcs", "pubsub"],
 ) as dag:
 
-    wait_for_event = PubSubPullSensor()
+    wait_for_event = PubSubPullSensor(
+        task_id="wait_for_gcs_event",
+        project_id=APP_PROJECT_ID,
+        subscription=PUBSUB_SUBSCRIPTION,
+        ack_on_response=True,
+        max_messages=1,
+        poke_interval=20,
+        timeout=60 * 10,
+    )
 
     def parse_gcs_event(ti, **_):
-        pass
+        pulled = ti.xcom_pull(task_ids="wait_for_gcs_event")
+        if not pulled:
+            raise ValueError("No Pub/Sub messages received.")
+        msg = pulled[0]["message"]
+        payload = base64.b64decode(msg["data"]).decode("utf-8")
+
+        bucket = payload["bucket"]
+        name = payload["name"]
+
+        if not bucket or not name:
+            raise ValueError("Invalid GCS event data.")
+
+        if bucket != RAW_BUCKET:
+            print("Skipping non-raw bucket event.")
+            ti.xcom_push(key="skip", value=True)
+            return
+
+        ti.xcom_push(key="bucket", value=bucket)
+        ti.xcom_push(key="name", value=name)
 
     parse_event = PythonOperator(
         task_id="parse_gcs_event",
