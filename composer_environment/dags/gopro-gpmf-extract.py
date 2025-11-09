@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import base64
 import json
-import os
 from datetime import datetime, timedelta
 
 from airflow import DAG
@@ -65,7 +64,7 @@ with DAG(
         if not pulled:
             raise ValueError("No Pub/Sub messages received.")
         msg = pulled[0]["message"]
-        payload = base64.b64decode(msg["data"]).decode("utf-8")
+        payload = json.loads(base64.b64decode(msg["data"]).decode("utf-8"))
 
         bucket = payload["bucket"]
         name = payload["name"]
