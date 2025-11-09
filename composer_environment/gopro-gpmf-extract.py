@@ -86,6 +86,20 @@ with DAG(
         python_callable=parse_gcs_event,
     )
 
-    run_gpmf_extraction = KubernetesPodOperator()
+    run_gpmf_extraction = KubernetesPodOperator(
+        task_id="run_gpmf_extraction",
+        name="gpmf-extract",
+        namespace="default",
+        image=CONTAINER_IMAGE,
+        image_pull_policy="IfNotPresent",
+        is_delete_operator_pod=True,
+        env_vars={
+            "RAW_BUCKET": "{{ ti.xcom_pull('parse_gcs_event', key='bucket')}}",
+            "CURATED_BUCKET": CURATED_BUCKET,
+            "OBJECT_NAME": "{{ ti.xcom_pull('parse_gcs_event', key='name')}}",
+            "OUT_PREFIX": OUT_PREFIX,
+        },
+        get_logs=True,
+    )
 
     wait_for_event >> parse_event >> run_gpmf_extraction

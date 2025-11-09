@@ -41,10 +41,9 @@ module "raw_bucket" {
     project     = "gopro-data"
   }
   notification = {
-    topic              = module.pubsub.pubsub_topic
-    payload_format     = "JSON_API_V1"
-    event_types        = ["OBJECT_FINALIZE"]
-    object_name_prefix = "raw/"
+    topic          = module.pubsub.pubsub_topic
+    payload_format = "JSON_API_V1"
+    event_types    = ["OBJECT_FINALIZE"]
   }
 
   force_destroy = true
@@ -137,10 +136,10 @@ resource "google_pubsub_subscription_iam_member" "this" {
 }
 
 module "artifact_registry" {
-  source      = "./modules/artifact-registry"
-  project_id  = local.project_id
-  repository_id = "gopro-artifact-repo"
-  region    = local.region
+  source            = "./modules/artifact-registry"
+  project_id        = local.project_id
+  repository_id     = "gopro-artifact-repo"
+  region            = local.region
   composer_sa_email = module.composer.composer_sa_email
 
   depends_on = [module.composer, google_project_service.required_services]
