@@ -2,7 +2,7 @@ name: Deploy DAGs to Airflow
 on:
   push:
     paths:
-      - "composer_environments/dags/**"
+      - "composer_environment/dags/**"
     branches:
       - main
 
