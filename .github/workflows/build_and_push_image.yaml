@@ -1,0 +1,56 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/**"
+      - ".github/workflows/build_and_push_image.yaml"
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Optional tag override (defaults to the short commit SHA)"
+        required: false
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GAR_LOCATION: ${{ vars.GAR_LOCATION || 'us-central1' }}
+  GAR_REPOSITORY: ${{ vars.GAR_REPOSITORY || 'gopro-artifact-repo' }}
+  GAR_IMAGE: ${{ vars.GAR_IMAGE || 'gpmf-extractor' }}
+
+jobs:
+  build-and-push:
+    name: Build and Push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Configure Artifact Registry auth
+        run: gcloud auth configure-docker "${GAR_LOCATION}-docker.pkg.dev" --quiet
+
+      - id: build
+        name: Build and push image
+        env:
+          TAG_INPUT: ${{ github.event.inputs.image_tag }}
+        run: |
+          set -euo pipefail
+          IMAGE_TAG=${TAG_INPUT:-${GITHUB_SHA::7}}
+          IMAGE_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${GAR_REPOSITORY}/${GAR_IMAGE}:${IMAGE_TAG}"
+          echo "Building ${IMAGE_URI}"
+          docker build -f scripts/Dockerfile -t "${IMAGE_URI}" ./scripts
+          docker push "${IMAGE_URI}"
+          echo "image=${IMAGE_URI}" >> "$GITHUB_OUTPUT"
