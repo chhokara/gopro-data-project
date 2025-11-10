@@ -67,6 +67,7 @@ resource "google_composer_environment" "this" {
         "google-cloud-bigquery" = ""
         "google-cloud-storage"  = ""
         "google-cloud-pubsub"   = ""
+        "apache-airflow-providers-cncf-kubernetes" = ""
       }
     }
 
