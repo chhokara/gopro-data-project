@@ -63,11 +63,12 @@ resource "google_composer_environment" "this" {
         CURATED_BUCKET = var.curated_bucket_name
       }, var.airflow_env_vars)
       pypi_packages = {
-        "gcsfs"                 = ""
-        "google-cloud-bigquery" = ""
-        "google-cloud-storage"  = ""
-        "google-cloud-pubsub"   = ""
+        "gcsfs"                                    = ""
+        "google-cloud-bigquery"                    = ""
+        "google-cloud-storage"                     = ""
+        "google-cloud-pubsub"                      = ""
         "apache-airflow-providers-cncf-kubernetes" = ""
+        "kubernetes"                               = ""
       }
     }
 
