@@ -52,7 +52,7 @@ with DAG(
         task_id="wait_for_gcs_event",
         project_id=APP_PROJECT_ID,
         subscription=PUBSUB_SUBSCRIPTION,
-        ack_on_response=True,
+        ack_messages=True,
         max_messages=1,
         poke_interval=20,
         timeout=60 * 10,
