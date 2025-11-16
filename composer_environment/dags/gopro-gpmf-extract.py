@@ -42,7 +42,7 @@ CONTAINER_IMAGE = f"{REGION}-docker.pkg.dev/{APP_PROJECT_ID}/{AR_REPO}/{AR_IMAGE
 with DAG(
     dag_id="gopro_gpmf_extract_v1",
     start_date=datetime(2025, 1, 1),
-    schedule=None,
+    schedule="* * * * *",
     catchup=False,
     default_args=DEFAULT_ARGS,
     tags=["gopro", "gpmf", "extraction", "gcs", "pubsub"],
