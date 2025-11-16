@@ -87,7 +87,8 @@ with DAG(
     run_gpmf_extraction = KubernetesPodOperator(
         task_id="run_gpmf_extraction",
         name="gpmf-extract",
-        namespace="default",
+        namespace="composer-user-workloads",
+        config_file="/home/airflow/composer_kube_config",
         image=CONTAINER_IMAGE,
         image_pull_policy="IfNotPresent",
         is_delete_operator_pod=True,
