@@ -117,7 +117,10 @@ module "composer" {
     APP_PROJECT_ID                                     = local.project_id
     PUBSUB_TOPIC                                       = module.pubsub.pubsub_topic
     PUBSUB_SUBSCRIPTION                                = module.pubsub.pubsub_subscription
-    AIRFLOW__WEBSERVER__SHOW_TRIGGER_FORM_IF_NO_PARAMS = "True"
+  }
+
+  airflow_config_overrides = {
+    "webserver.show_trigger_form_if_no_params" = "True"
   }
 
   raw_bucket_name     = module.raw_bucket.name
