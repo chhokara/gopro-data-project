@@ -120,7 +120,7 @@ module "composer" {
   }
 
   airflow_config_overrides = {
-    "webserver.show_trigger_form_if_no_params" = "True"
+    "webserver-show_trigger_form_if_no_params" = "True"
   }
 
   raw_bucket_name     = module.raw_bucket.name
