@@ -80,4 +80,4 @@ with DAG(
         get_logs=True,
     )
 
-    prepare_on_demand_run >> run_gpmf_extraction
+    prepare_task >> run_gpmf_extraction
