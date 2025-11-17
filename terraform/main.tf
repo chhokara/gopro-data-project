@@ -113,10 +113,11 @@ module "composer" {
 
   image_version = "composer-2.14.4-airflow-2.10.5"
   airflow_env_vars = {
-    REGION              = local.region
-    APP_PROJECT_ID      = local.project_id
-    PUBSUB_TOPIC        = module.pubsub.pubsub_topic
-    PUBSUB_SUBSCRIPTION = module.pubsub.pubsub_subscription
+    REGION                                             = local.region
+    APP_PROJECT_ID                                     = local.project_id
+    PUBSUB_TOPIC                                       = module.pubsub.pubsub_topic
+    PUBSUB_SUBSCRIPTION                                = module.pubsub.pubsub_subscription
+    AIRFLOW__WEBSERVER__SHOW_TRIGGER_FORM_IF_NO_PARAMS = "True"
   }
 
   raw_bucket_name     = module.raw_bucket.name
