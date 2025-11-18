@@ -102,33 +102,33 @@ module "pubsub" {
   depends_on = [google_project_service.required_services]
 }
 
-module "composer" {
-  source           = "./modules/composer"
-  environment_name = "gopro-data-composer"
-  project_id       = local.project_id
-  region           = local.region
+# module "composer" {
+#   source           = "./modules/composer"
+#   environment_name = "gopro-data-composer"
+#   project_id       = local.project_id
+#   region           = local.region
 
-  network    = "default"
-  subnetwork = "default"
+#   network    = "default"
+#   subnetwork = "default"
 
-  image_version = "composer-2.14.4-airflow-2.10.5"
-  airflow_env_vars = {
-    REGION                                             = local.region
-    APP_PROJECT_ID                                     = local.project_id
-    PUBSUB_TOPIC                                       = module.pubsub.pubsub_topic
-    PUBSUB_SUBSCRIPTION                                = module.pubsub.pubsub_subscription
-  }
+#   image_version = "composer-2.14.4-airflow-2.10.5"
+#   airflow_env_vars = {
+#     REGION                                             = local.region
+#     APP_PROJECT_ID                                     = local.project_id
+#     PUBSUB_TOPIC                                       = module.pubsub.pubsub_topic
+#     PUBSUB_SUBSCRIPTION                                = module.pubsub.pubsub_subscription
+#   }
 
-  airflow_config_overrides = {
-    "webserver-show_trigger_form_if_no_params" = "True"
-  }
+#   airflow_config_overrides = {
+#     "webserver-show_trigger_form_if_no_params" = "True"
+#   }
 
-  raw_bucket_name     = module.raw_bucket.name
-  curated_bucket_name = module.curated_bucket.name
-  dags_bucket_name    = module.dags_bucket.name
+#   raw_bucket_name     = module.raw_bucket.name
+#   curated_bucket_name = module.curated_bucket.name
+#   dags_bucket_name    = module.dags_bucket.name
 
-  depends_on = [module.raw_bucket, module.curated_bucket, module.dags_bucket, module.pubsub, google_project_service.required_services]
-}
+#   depends_on = [module.raw_bucket, module.curated_bucket, module.dags_bucket, module.pubsub, google_project_service.required_services]
+# }
 
 resource "google_pubsub_subscription_iam_member" "this" {
   project      = local.project_id
