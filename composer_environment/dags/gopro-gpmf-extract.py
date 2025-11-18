@@ -56,6 +56,7 @@ with DAG(
         max_messages=1,
         poke_interval=20,
         timeout=60 * 10,
+        deferrable=True,
     )
 
     def parse_gcs_event(ti, **_):
