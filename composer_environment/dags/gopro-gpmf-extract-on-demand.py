@@ -6,7 +6,6 @@ from airflow.models import Variable
 from airflow.operators.python import PythonOperator
 from airflow.providers.cncf.kubernetes.operators.pod import KubernetesPodOperator
 
-# Trigger
 # General Config
 APP_PROJECT_ID = Variable.get(
     "APP_PROJECT_ID", default_var="gopro-data-project")
