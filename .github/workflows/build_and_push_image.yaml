@@ -18,6 +18,7 @@ env:
   GAR_LOCATION: ${{ vars.GAR_LOCATION || 'us-central1' }}
   GAR_REPOSITORY: ${{ vars.GAR_REPOSITORY || 'gopro-artifact-repo' }}
   GAR_IMAGE: ${{ vars.GAR_IMAGE || 'gpmf-extractor' }}
+  GAR_ALIAS_TAG: ${{ vars.GAR_ALIAS_TAG || 'v1' }}
 
 jobs:
   build-and-push:
@@ -53,4 +54,9 @@ jobs:
           echo "Building ${IMAGE_URI}"
           docker build -f scripts/Dockerfile -t "${IMAGE_URI}" ./scripts
           docker push "${IMAGE_URI}"
+          # Also push a stable alias tag (e.g., v1) for Terraform to consume.
+          ALIAS_TAG="${GAR_ALIAS_TAG}"
+          ALIAS_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${GAR_REPOSITORY}/${GAR_IMAGE}:${ALIAS_TAG}"
+          docker tag "${IMAGE_URI}" "${ALIAS_URI}"
+          docker push "${ALIAS_URI}"
           echo "image=${IMAGE_URI}" >> "$GITHUB_OUTPUT"
