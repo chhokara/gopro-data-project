@@ -13,7 +13,8 @@ variable "repository_id" {
   type        = string
 }
 
-variable "composer_sa_email" {
-  description = "The service account email used by Cloud Composer."
-  type        = string
+variable "reader_principals" {
+  description = "List of principals (e.g. service accounts) that should have reader access to the repository."
+  type        = list(string)
+  default     = []
 }

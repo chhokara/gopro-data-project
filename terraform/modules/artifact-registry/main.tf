@@ -14,10 +14,11 @@ resource "google_artifact_registry_repository" "this" {
   }
 }
 
-resource "google_artifact_registry_repository_iam_member" "this" {
+resource "google_artifact_registry_repository_iam_member" "reader" {
+  for_each   = toset(var.reader_principals)
   project    = var.project_id
   location   = var.region
   repository = google_artifact_registry_repository.this.repository_id
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:${var.composer_sa_email}"
+  member     = each.value
 }
