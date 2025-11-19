@@ -150,11 +150,16 @@ resource "google_cloud_run_service" "gpmf_extractor" {
   name     = "gpmf-extractor"
   location = local.region
 
+  metadata {
+    annotations = {
+      "run.googleapis.com/ingress" = "internal-and-cloud-load-balancing"
+    }
+  }
+
   template {
     metadata {
       annotations = {
-        "run.googleapis.com/ingress"       = "internal-and-cloud-load-balancing"
-        "autoscaling.knative.dev/maxScale" = "3"
+        "autoscaling.knative.dev/maxScale" = "1"
       }
     }
 
