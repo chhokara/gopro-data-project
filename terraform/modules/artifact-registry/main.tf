@@ -14,11 +14,10 @@ resource "google_artifact_registry_repository" "this" {
   }
 }
 
-resource "google_artifact_registry_repository_iam_member" "reader" {
-  for_each   = toset(var.reader_principals)
+resource "google_artifact_registry_repository_iam_binding" "readers" {
   project    = var.project_id
   location   = var.region
   repository = google_artifact_registry_repository.this.repository_id
   role       = "roles/artifactregistry.reader"
-  member     = each.value
+  members    = var.reader_principals
 }
