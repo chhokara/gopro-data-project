@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project implements a serverless data pipeline on Google Cloud Platform (GCP) to extract and visualize telemetry (GPMF) data from GoPro videos. Raw .MP4 files are uploaded to Google Cloud Storage (GCS), where an Object Finalize event triggers a Cloud Composer (Airflow) DAG that launches a KubernetesPodOperator task running a custom container (built with gopro-telemetry) to parse GPS, accelerometer, and gyroscope streams. The processed outputs are stored in a curated GCS bucket as Parquet/JSON files, which are then loaded into BigQuery for querying and analysis. Finally, the telemetry is visualized in Grafana dashboards connected to BigQuery, enabling rich time-series analysis of speed, movement, and positioning data. The architecture is provisioned with Terraform and designed to be low-cost, scalable, and easily extensible with additional analytics or visualization layers in the future.
+This project implements a fully serverless data pipeline on Google Cloud Platform (GCP) to extract and visualize GPMF telemetry data from GoPro videos. When a raw .mp4 file is uploaded to a Google Cloud Storage (GCS) bucket, an Object Finalize event triggers Eventarc, which launches a Cloud Run Job running a custom ETL container. The job parses embedded GPS, accelerometer, and gyroscope data and writes the processed outputs into a curated GCS bucket. These curated datasets are then loaded into BigQuery for scalable querying and analysis. The telemetry is visualized in Grafana, which connects directly to BigQuery to provide rich time-series dashboards for speed, movement, and performance insights. The entire architecture is provisioned using Terraform, resulting in a cost-efficient, event-driven, and easily extensible system for future analytics and visualization enhancements.
 
 ## System Architecture
 
@@ -10,13 +10,12 @@ This project implements a serverless data pipeline on Google Cloud Platform (GCP
 
 ## Technologies
 
-- GoPro (GPMF Telemetry) – Source of raw video and embedded sensor data
-- Google Cloud Storage (GCS) – Raw and curated data storage layers
-- Pub/Sub – Event-driven messaging for object finalize notifications
-- Cloud Composer (Airflow) – Orchestrates the data pipeline
-- KubernetesPodOperator – Runs the telemetry extraction container
-- Artifact Registry – Stores and serves the custom ETL Docker image
-- BigQuery – Serverless analytics warehouse for processed telemetry
-- Grafana (Managed on GCP) – Visualization layer for time-series insights
-- Docker – Containerization for the ETL processing image
+- GoPro (GPMF Telemetry) – Source of raw video and sensor data
+- Google Cloud Storage (GCS) – Raw and curated data storage
+- Eventarc – Triggers ETL jobs on GCS object finalize events
+- Cloud Run Jobs – Serverless execution of the ETL pipeline
+- Artifact Registry – Stores the ETL Docker image
+- BigQuery – Analytics warehouse for processed telemetry
+- Grafana – Visualization layer for insights and metrics
+- Docker – Containerization for the ETL application
 - Terraform – Infrastructure as Code for provisioning all resources
