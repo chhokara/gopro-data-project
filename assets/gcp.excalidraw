@@ -309,7 +309,7 @@
       "id": "fWGZbFuYuVgyC4zzx_DHn",
       "type": "arrow",
       "x": 658.57421875,
-      "y": 496.7532952193409,
+      "y": 497.7532952193409,
       "width": 145.46452776069077,
       "height": 0.696423007740691,
       "angle": 0,
@@ -325,11 +325,11 @@
       "index": "b0X",
       "roundness": null,
       "seed": 1246692885,
-      "version": 489,
-      "versionNonce": 1357494159,
+      "version": 491,
+      "versionNonce": 1656841935,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1763602026312,
+      "updated": 1763602336409,
       "link": null,
       "locked": false,
       "points": [
@@ -346,7 +346,7 @@
       "startBinding": null,
       "endBinding": {
         "elementId": "hG2iJx3k0dkkvWmiikJU3",
-        "focus": 0.06814443247697562,
+        "focus": 0.1001612911428677,
         "gap": 7.890495352681796
       },
       "startArrowhead": null,
