@@ -23,7 +23,7 @@ resource "google_pubsub_subscription" "this" {
   expiration_policy {
     ttl = ""
   }
-  
+
   depends_on = [google_pubsub_topic.this]
 }
 

@@ -4,7 +4,6 @@ locals {
     "storage.googleapis.com",
     "bigquery.googleapis.com",
     "artifactregistry.googleapis.com",
-    "containeranalysis.googleapis.com",
     "iamcredentials.googleapis.com",
   ]
 
@@ -76,7 +75,6 @@ module "curated_bucket" {
 
   depends_on = [google_project_service.required_services]
 }
-
 
 module "pubsub" {
   source            = "./modules/pubsub"
