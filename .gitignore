@@ -5,3 +5,4 @@
 terraform.tfstate*
 footage
 scripts/node_modules/
+airflow/gcp-key.json

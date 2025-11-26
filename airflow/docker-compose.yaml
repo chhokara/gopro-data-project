@@ -11,12 +11,18 @@ x-airflow-common: &airflow-common
     AIRFLOW__WEBSERVER__RBAC: "true"
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__DATABASE__LOAD_DEFAULT_CONNECTIONS: "false"
-    _PIP_ADDITIONAL_REQUIREMENTS: ""
+    _PIP_ADDITIONAL_REQUIREMENTS: "apache-airflow-providers-google apache-airflow-providers-cncf-kubernetes"
+    GOOGLE_APPLICATION_CREDENTIALS: /keys/gcp-key.json
+    AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: >-
+      google-cloud-platform://?extra__google_cloud_platform__key_path=/keys/gcp-key.json
+      &extra__google_cloud_platform__project=gopro-data-project
+      &extra__google_cloud_platform__scope=https://www.googleapis.com/auth/cloud-platform
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
     - ./config:/opt/airflow/config
+    - ./gcp-key.json:/keys/gcp-key.json:ro
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     postgres:
