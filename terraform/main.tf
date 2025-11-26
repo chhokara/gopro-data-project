@@ -93,3 +93,27 @@ module "artifact_registry" {
 
   depends_on = [google_project_service.required_services]
 }
+
+resource "google_service_account" "airflow_orchestrator" {
+  account_id   = "airflow-orchestrator"
+  display_name = "Airflow Orchestrator Service Account"
+  project      = local.project_id
+}
+
+resource "google_project_iam_member" "airflow_gcs" {
+  project = local.project_id
+  role    = "roles/storage.objectAdmin"
+  member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
+
+resource "google_project_iam_member" "airflow_pubsub_sub" {
+  project = local.project_id
+  role    = "roles/pubsub.subscriber"
+  member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
+
+resource "google_project_iam_member" "airflow_pubsub_pub" {
+  project = local.project_id
+  role    = "roles/pubsub.publisher"
+  member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
