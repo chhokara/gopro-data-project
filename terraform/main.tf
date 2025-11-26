@@ -5,6 +5,7 @@ locals {
     "bigquery.googleapis.com",
     "artifactregistry.googleapis.com",
     "iamcredentials.googleapis.com",
+    "iam.googleapis.com",
   ]
 
   project_id = "gopro-data-project"
