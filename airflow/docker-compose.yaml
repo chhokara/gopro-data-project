@@ -5,7 +5,7 @@ x-airflow-common: &airflow-common
   environment: &airflow-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-    AIRFLOW__CORE__FERNET_KEY: "arsh_fernet_key"
+    AIRFLOW__CORE__FERNET_KEY: "Pjs4zR5iEyF_y71d0UxHl2PT-oYq9xvWehflqSZ_l7U="
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
     AIRFLOW__CORE__DAG_CONCURRENCY: "8"
     AIRFLOW__WEBSERVER__RBAC: "true"
@@ -13,10 +13,10 @@ x-airflow-common: &airflow-common
     AIRFLOW__DATABASE__LOAD_DEFAULT_CONNECTIONS: "false"
     _PIP_ADDITIONAL_REQUIREMENTS: "apache-airflow-providers-google apache-airflow-providers-cncf-kubernetes"
     GOOGLE_APPLICATION_CREDENTIALS: /keys/gcp-key.json
-    AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: >-
-      google-cloud-platform://?extra__google_cloud_platform__key_path=/keys/gcp-key.json
-      &extra__google_cloud_platform__project=gopro-data-project
-      &extra__google_cloud_platform__scope=https://www.googleapis.com/auth/cloud-platform
+    # AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: >-
+    #   google-cloud-platform://?extra__google_cloud_platform__key_path=/keys/gcp-key.json
+    #   &extra__google_cloud_platform__project=gopro-data-project
+    #   &extra__google_cloud_platform__scope=https://www.googleapis.com/auth/cloud-platform
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs

@@ -7,7 +7,7 @@ from airflow.providers.google.cloud.sensors.pubsub import PubSubPullSensor
 from airflow.providers.google.cloud.operators.gcs import GCSListObjectsOperator
 
 PROJECT_ID = 'gopro-data-project'
-SUBSCRIPTION = 'projects/gopro-data-project/subscriptions/gopro-data-subscription'
+SUBSCRIPTION = 'gopro-data-subscription'
 RAW_BUCKET = 'gopro-raw-data-bucket'
 CURATED_BUCKET = 'gopro-curated-data-bucket'
 

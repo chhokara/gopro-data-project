@@ -46,6 +46,12 @@ module "raw_bucket" {
     project     = "gopro-data"
   }
 
+  notification = {
+    topic = "gopro-data-topic"
+    payload_format = "JSON_API_V1"
+    event_types = ["OBJECT_FINALIZE"]
+  }
+
   force_destroy = true
 
   depends_on = [google_project_service.required_services]
