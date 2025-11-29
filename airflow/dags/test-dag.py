@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import json
+import base64
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
@@ -36,16 +37,20 @@ with DAG(
     )
 
     def process_pubsub_message(**context):
-        messages = context["ti"].xcom_pull(task_ids='wait_for_pubsub_message')
+        ti = context['ti']
+
+        messages = ti.xcom_pull(task_ids='wait_for_pubsub_message')
         msg = messages[0]
-        payload = msg.message.data.decode('utf-8')
+        data_b64 = msg["message"]["data"]
+
+        payload = base64.b64decode(data_b64).decode('utf-8')
 
         try:
             data = json.loads(payload)
         except json.JSONDecodeError:
             data = {'raw_payload': payload}
 
-        context['ti'].xcom_push(key='parsed_payload', value=data)
+        ti.xcom_push(key='parsed_payload', value=data)
 
     parse_message = PythonOperator(
         task_id='parse_pubsub_message',
