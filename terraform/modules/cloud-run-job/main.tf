@@ -45,9 +45,9 @@ resource "google_cloud_run_v2_job" "gpmf_job" {
         }
       }
 
-      service_account_name = google_service_account.gpmf_job_sa.email
-      max_retries          = 1
-      timeout              = "900s"
+      service_account = google_service_account.gpmf_job_sa.email
+      max_retries     = 1
+      timeout         = "900s"
     }
   }
 }
