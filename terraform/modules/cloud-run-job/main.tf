@@ -15,6 +15,12 @@ resource "google_project_iam_member" "gpmf_job_bigquery_access" {
   member  = "serviceAccount:${google_service_account.gpmf_job_sa.email}"
 }
 
+resource "google_project_iam_member" "gpmf_job_artifact_reader" {
+  project = var.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.gpmf_job_sa.email}"
+}
+
 resource "google_cloud_run_v2_job" "gpmf_job" {
   name     = var.job_name
   location = var.region
