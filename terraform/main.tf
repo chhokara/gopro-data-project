@@ -6,6 +6,7 @@ locals {
     "artifactregistry.googleapis.com",
     "iamcredentials.googleapis.com",
     "iam.googleapis.com",
+    "run.googleapis.com",
   ]
 
   project_id = "gopro-data-project"
@@ -47,9 +48,9 @@ module "raw_bucket" {
   }
 
   notification = {
-    topic = "gopro-data-topic"
+    topic          = "gopro-data-topic"
     payload_format = "JSON_API_V1"
-    event_types = ["OBJECT_FINALIZE"]
+    event_types    = ["OBJECT_FINALIZE"]
   }
 
   force_destroy = true
@@ -123,4 +124,18 @@ resource "google_project_iam_member" "airflow_pubsub_pub" {
   project = local.project_id
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
+
+module "cloud_run_job_service" {
+  source             = "./modules/cloud-run-job"
+  project_id         = local.project_id
+  region             = local.region
+  service_account_id = "cloud-run-job-sa"
+  job_name           = "gopro-data-processor-job"
+  container_image    = "${local.region}-docker.pkg.dev/${local.project_id}/${local.artifact_repo}/gpmf-extractor:v1"
+  invoker_member     = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+  curated_bucket     = local.curated_bucket_name
+  out_prefix         = "gpmf/"
+
+  depends_on = [google_project_service.required_services]
 }
