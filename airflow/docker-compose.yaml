@@ -11,7 +11,7 @@ x-airflow-common: &airflow-common
     AIRFLOW__WEBSERVER__RBAC: "true"
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__DATABASE__LOAD_DEFAULT_CONNECTIONS: "false"
-    _PIP_ADDITIONAL_REQUIREMENTS: "apache-airflow-providers-google apache-airflow-providers-cncf-kubernetes"
+    _PIP_ADDITIONAL_REQUIREMENTS: "apache-airflow-providers-google"
     GOOGLE_APPLICATION_CREDENTIALS: /keys/gcp-key.json
     # AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: >-
     #   google-cloud-platform://?extra__google_cloud_platform__key_path=/keys/gcp-key.json
