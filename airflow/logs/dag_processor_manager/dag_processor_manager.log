@@ -12310,3 +12310,41 @@ File Path                                PID    Runtime      # DAGs    # Errors 
 /opt/airflow/dags/gopro-gpmf-extract.py                           1           0  0.15s           2025-12-09T01:40:06                      12
 /opt/airflow/dags/test-dag.py                                     1           0  0.13s           2025-12-09T01:40:06                      10
 ================================================================================
+[2025-12-09T01:40:41.995+0000] {manager.py:1008} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run               Last # of DB Queries
+---------------------------------------  -----  ---------  --------  ----------  --------------  -------------------  ----------------------
+/opt/airflow/dags/gopro-gpmf-extract.py                           1           0  0.15s           2025-12-09T01:40:36                      12
+/opt/airflow/dags/test-dag.py                                     1           0  0.13s           2025-12-09T01:40:36                      10
+================================================================================
+[2025-12-09T01:41:12.447+0000] {manager.py:1008} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run               Last # of DB Queries
+---------------------------------------  -----  ---------  --------  ----------  --------------  -------------------  ----------------------
+/opt/airflow/dags/gopro-gpmf-extract.py                           1           0  0.15s           2025-12-09T01:41:07                      12
+/opt/airflow/dags/test-dag.py                                     1           0  0.14s           2025-12-09T01:41:07                      10
+================================================================================
+[2025-12-09T01:41:42.789+0000] {manager.py:1008} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run               Last # of DB Queries
+---------------------------------------  -----  ---------  --------  ----------  --------------  -------------------  ----------------------
+/opt/airflow/dags/gopro-gpmf-extract.py                           1           0  0.15s           2025-12-09T01:41:37                      12
+/opt/airflow/dags/test-dag.py                                     1           0  0.13s           2025-12-09T01:41:37                      10
+================================================================================
+[2025-12-09T01:42:13.303+0000] {manager.py:1008} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run               Last # of DB Queries
+---------------------------------------  -----  ---------  --------  ----------  --------------  -------------------  ----------------------
+/opt/airflow/dags/gopro-gpmf-extract.py                           1           0  0.16s           2025-12-09T01:42:08                      12
+/opt/airflow/dags/test-dag.py                                     1           0  0.14s           2025-12-09T01:42:08                      10
+================================================================================
+[2025-12-09T01:42:23.409+0000] {manager.py:832} INFO - Searching for files in /opt/airflow/dags
+[2025-12-09T01:42:23.441+0000] {manager.py:835} INFO - There are 2 files in /opt/airflow/dags
