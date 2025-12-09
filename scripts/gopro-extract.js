@@ -1,5 +1,6 @@
 const { Storage } = require("@google-cloud/storage");
 const gpmfExtract = require("gpmf-extract");
+const goproTelemetry = require("gopro-telemetry");
 
 const storage = new Storage();
 
@@ -31,28 +32,11 @@ const storage = new Storage();
       process.exit(0);
     }
 
-    const base = OBJECT_NAME.replace(/^.*[\\/]/, "").replace(/\.mp4$/i, "");
-    const outGpmd = `${OUT_PREFIX}${base}.gpmd`;
-    const outTiming = `${OUT_PREFIX}${base}_timing.json`;
+    const telemetry = await goproTelemetry(result, {
+      stream: ["ACCL", "GYRO", "GPS"],
+    });
 
-    await storage
-      .bucket(CURATED_BUCKET)
-      .file(outGpmd)
-      .save(Buffer.from(result.rawData), {
-        contentType: "application/octet-stream",
-        resumable: false,
-      });
-
-    await storage
-      .bucket(CURATED_BUCKET)
-      .file(outTiming)
-      .save(JSON.stringify(result.timing || {}, null, 2), {
-        contentType: "application/json",
-        resumable: false,
-      });
-
-    console.log(`Wrote GPMF data to gs://${CURATED_BUCKET}/${outGpmd}`);
-    console.log(`Wrote timing data to gs://${CURATED_BUCKET}/${outTiming}`);
+    console.log("telemetry keys:", Object.keys(telemetry));
   } catch (e) {
     console.error("Error during extraction:", e);
     process.exit(1);
