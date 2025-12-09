@@ -54,9 +54,14 @@ jobs:
           echo "Building ${IMAGE_URI}"
           docker build -f scripts/Dockerfile -t "${IMAGE_URI}" ./scripts
           docker push "${IMAGE_URI}"
-          # Also push a stable alias tag (e.g., v1) for Terraform to consume.
+          # Also push a stable alias tag (e.g., v1) for Terraform to consume if it doesn't already exist.
+          # The repository enforces tag immutability, so we skip updating an existing alias tag.
           ALIAS_TAG="${GAR_ALIAS_TAG}"
           ALIAS_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${GAR_REPOSITORY}/${GAR_IMAGE}:${ALIAS_TAG}"
-          docker tag "${IMAGE_URI}" "${ALIAS_URI}"
-          docker push "${ALIAS_URI}"
+          if docker manifest inspect "${ALIAS_URI}" >/dev/null 2>&1; then
+            echo "Alias tag ${ALIAS_TAG} already exists (tag immutability enabled); skipping alias push."
+          else
+            docker tag "${IMAGE_URI}" "${ALIAS_URI}"
+            docker push "${ALIAS_URI}"
+          fi
           echo "image=${IMAGE_URI}" >> "$GITHUB_OUTPUT"
