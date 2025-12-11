@@ -62,6 +62,6 @@ resource "google_cloud_run_v2_job_iam_member" "gpmf_job_invoker" {
   location = var.region
   project  = var.project_id
   name     = google_cloud_run_v2_job.gpmf_job.name
-  role     = "roles/run.invoker"
+  role     = "roles/run.jobRunner"
   member   = var.invoker_member
 }
