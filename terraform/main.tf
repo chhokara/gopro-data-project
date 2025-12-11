@@ -126,6 +126,12 @@ resource "google_project_iam_member" "airflow_pubsub_pub" {
   member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
 }
 
+resource "google_project_iam_member" "gpmf_job_runner" {
+  project = local.project_id
+  role    = "roles/run.jobRunner"
+  member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
+
 module "cloud_run_job_service" {
   source             = "./modules/cloud-run-job"
   project_id         = local.project_id
