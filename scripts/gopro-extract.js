@@ -16,7 +16,7 @@ const storage = new Storage();
     }
 
     if (!OBJECT_NAME.toLowerCase().endsWith(".mp4")) {
-      console.log("The object is not an MP4 file. Exiting.");
+      console.log(OBJECT_NAME + " is not an MP4 file.");
       process.exit(0);
     }
 
