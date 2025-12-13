@@ -132,6 +132,13 @@ resource "google_project_iam_member" "airflow_job_runner" {
   member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
 }
 
+resource "google_project_iam_member" "airflow_run_viewer" {
+  project = local.project_id
+  role    = "roles/run.viewer"
+  member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
+
+
 module "cloud_run_job_service" {
   source             = "./modules/cloud-run-job"
   project_id         = local.project_id
