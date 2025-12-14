@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from airflow import DAG
+from airflow.models.param import Param
 from airflow.operators.python import PythonOperator
 from airflow.providers.google.cloud.operators.cloud_run import CloudRunExecuteJobOperator
 
@@ -20,9 +21,10 @@ default_args = {
 def prepare_inputs(**context):
     dag_run = context.get("dag_run")
     conf = dag_run.conf if dag_run else {}
+    params = context.get("params", {})
 
-    bucket = conf.get("bucket") or RAW_BUCKET
-    object_name = conf.get("object_name")
+    bucket = conf.get("bucket") or params.get("bucket") or RAW_BUCKET
+    object_name = conf.get("object_name") or params.get("object_name")
 
     if not object_name:
         raise ValueError("Provide object_name in DAG run config to point at an existing file.")
@@ -39,6 +41,20 @@ with DAG(
     catchup=False,
     default_args=default_args,
     description="On-demand trigger to process an existing GoPro video already in raw GCS.",
+    # Defining Params surfaces a form in the UI when triggering the DAG.
+    params={
+        "bucket": Param(
+            default=RAW_BUCKET,
+            type="string",
+            description="GCS bucket containing the raw GoPro file.",
+        ),
+        "object_name": Param(
+            default="",
+            type="string",
+            description="Path of the existing GoPro file in the bucket (required).",
+        ),
+    },
+    dag_run_conf_overrides_params=True,
 ) as dag:
     parse_conf = PythonOperator(
         task_id="prepare_inputs",

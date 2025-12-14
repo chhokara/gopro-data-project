@@ -19,3 +19,12 @@ This project implements a fully serverless data pipeline on Google Cloud Platfor
 - BigQuery – Telemetry analytics
 - Grafana – BigQuery-powered dashboards
 - Terraform – IaC for all GCP resources
+
+## Triggering the manual extract DAG with inputs
+
+The `gopro_gpmf_extract_manual` DAG now exposes typed `params`, so the Airflow UI shows an input form when you trigger it. From the DAG’s Grid view, click **Trigger DAG w/ config**, fill in:
+
+- `bucket`: GCS bucket that holds the uploaded file (defaults to `gopro-raw-data-bucket`)
+- `object_name`: Path to the existing GoPro file inside that bucket (required)
+
+Those values are passed to Cloud Run as environment variables `RAW_BUCKET` and `OBJECT_NAME` for the extraction job.
