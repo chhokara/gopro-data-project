@@ -49,6 +49,14 @@ resource "google_cloud_run_v2_job" "gpmf_job" {
           name  = "OUT_PREFIX"
           value = var.out_prefix
         }
+
+        resources {
+          limits = {
+            "memory" = "4Gi"
+            # optionally:
+            # "cpu"    = "2"
+          }
+        }
       }
 
       service_account = google_service_account.gpmf_job_sa.email
