@@ -27,7 +27,8 @@ def prepare_inputs(**context):
     object_name = conf.get("object_name") or params.get("object_name")
 
     if not object_name:
-        raise ValueError("Provide object_name in DAG run config to point at an existing file.")
+        raise ValueError(
+            "Provide object_name in DAG run config to point at an existing file.")
 
     ti = context["ti"]
     ti.xcom_push(key="bucket", value=bucket)
@@ -54,7 +55,6 @@ with DAG(
             description="Path of the existing GoPro file in the bucket (required).",
         ),
     },
-    dag_run_conf_overrides_params=True,
 ) as dag:
     parse_conf = PythonOperator(
         task_id="prepare_inputs",
