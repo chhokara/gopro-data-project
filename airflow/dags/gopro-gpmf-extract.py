@@ -54,7 +54,7 @@ with DAG(
             data = {"raw_payload": payload}
 
         bucket = data.get("bucket")
-        object_name = data.get("object_name")
+        object_name = data.get("name")
 
         ti.xcom_push(key='bucket', value=bucket)
         ti.xcom_push(key='object_name', value=object_name)

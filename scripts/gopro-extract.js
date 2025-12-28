@@ -23,9 +23,8 @@ const storage = new Storage();
     console.log(`Starting extraction for gs://${RAW_BUCKET}/${OBJECT_NAME}`);
 
     const [buf] = await storage.bucket(RAW_BUCKET).file(OBJECT_NAME).download();
-    const uint8Array = new Uint8Array(buf);
 
-    const result = await gpmfExtract(uint8Array);
+    const result = await gpmfExtract(buf);
 
     if (!result || !result.rawData || result.rawData.length === 0) {
       console.log("No GPMF data found in the video.");
