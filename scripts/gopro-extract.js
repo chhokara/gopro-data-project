@@ -35,7 +35,7 @@ const storage = new Storage();
       stream: ["ACCL", "GYRO", "GPS"],
     });
 
-    console.log("telemetry keys:", Object.keys(telemetry));
+    console.log("telemetry output:", telemetry["1"]);
   } catch (e) {
     console.error("Error during extraction:", e);
     process.exit(1);
