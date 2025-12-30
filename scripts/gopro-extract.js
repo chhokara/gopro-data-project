@@ -37,15 +37,18 @@ const storage = new Storage();
 
     console.log(
       "acceleration samples:",
-      telemetry["1"]["streams"]["ACCL"]["samples"]
+      telemetry["1"]["streams"]["ACCL"]["samples"].slice(0, 5)
     );
 
     console.log(
       "gyroscope samples:",
-      telemetry["1"]["streams"]["GYRO"]["samples"]
+      telemetry["1"]["streams"]["GYRO"]["samples"].slice(0, 5)
     );
 
-    console.log("GPS samples:", telemetry["1"]["streams"]["GPS"]["samples"]);
+    console.log(
+      "GPS samples:",
+      telemetry["1"]["streams"]["GPS"]["samples"].slice(0, 5)
+    );
   } catch (e) {
     console.error("Error during extraction:", e);
     process.exit(1);
