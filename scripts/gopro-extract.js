@@ -35,15 +35,15 @@ const storage = new Storage();
       stream: ["ACCL", "GYRO", "GPS"],
     });
 
-    // console.log(
-    //   "acceleration samples:",
-    //   telemetry["1"]["streams"]["ACCL"]["samples"].slice(0, 5),
-    // );
-
     console.log(
-      "gyroscope samples:",
-      telemetry["1"]["streams"]["GYRO"]["samples"].slice(0, 5),
+      "acceleration samples:",
+      telemetry["1"]["streams"]["ACCL"]["samples"].slice(0, 5),
     );
+
+    // console.log(
+    //   "gyroscope samples:",
+    //   telemetry["1"]["streams"]["GYRO"]["samples"].slice(0, 5),
+    // );
 
     // console.log(
     //   "GPS samples:",
