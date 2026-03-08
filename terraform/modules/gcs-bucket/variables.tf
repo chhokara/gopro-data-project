@@ -14,7 +14,7 @@ variable "name" {
   type        = string
 }
 
-variable "unform_bucket_level_access" {
+variable "uniform_bucket_level_access" {
   description = "Whether to enable uniform bucket-level access."
   type        = bool
   default     = true
@@ -80,22 +80,4 @@ variable "labels" {
   default     = {}
 }
 
-variable "iam_members" {
-  description = "A list of IAM members to bind to the bucket."
-  type = list(object({
-    role   = string
-    member = string
-  }))
-  default = []
-}
 
-variable "notification" {
-  description = "Optional Pub/Sub notification config"
-  type = object({
-    topic              = string
-    payload_format     = optional(string)
-    event_types        = optional(list(string))
-    object_name_prefix = optional(string)
-  })
-  default = null
-}

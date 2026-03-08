@@ -3,7 +3,7 @@ resource "google_storage_bucket" "this" {
   project  = var.project_id
   location = var.location
 
-  uniform_bucket_level_access = var.unform_bucket_level_access
+  uniform_bucket_level_access = var.uniform_bucket_level_access
   public_access_prevention    = var.public_access_prevention
   force_destroy               = var.force_destroy
   storage_class               = var.autoclass_enabled ? null : var.storage_class
@@ -42,23 +42,4 @@ resource "google_storage_bucket" "this" {
     },
     var.labels
   )
-}
-
-resource "google_storage_bucket_iam_member" "this" {
-  for_each = {
-    for i, m in var.iam_members : i => m
-  }
-
-  bucket = google_storage_bucket.this.name
-  role   = each.value.role
-  member = each.value.member
-}
-
-resource "google_storage_notification" "this" {
-  count              = var.notification != null ? 1 : 0
-  bucket             = google_storage_bucket.this.name
-  topic              = var.notification.topic
-  payload_format     = coalesce(var.notification.payload_format, "JSON_API_V1")
-  event_types        = coalesce(var.notification.event_types, ["OBJECT_FINALIZE"])
-  object_name_prefix = lookup(var.notification, "object_name_prefix", null)
 }

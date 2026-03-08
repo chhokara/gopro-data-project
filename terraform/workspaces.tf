@@ -1,12 +1,11 @@
-resource "tfe_organization" "gopro-data-org" {
-  name  = "gopro-data-org"
-  email = var.tfc_email
+data "tfe_organization" "gopro-data-org" {
+  name = "gopro-data-org"
 }
 
 resource "tfe_workspace" "gopro-data-workspace" {
   name              = "gopro-data-workspace"
   description       = "Workspace for GoPro Data Project"
-  organization      = tfe_organization.gopro-data-org.name
+  organization      = data.tfe_organization.gopro-data-org.name
   queue_all_runs    = false
   working_directory = "./terraform"
   auto_apply        = true
