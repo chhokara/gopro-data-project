@@ -7,3 +7,4 @@ footage
 scripts/node_modules/
 airflow/gcp-key.json
 airflow/logs/
+terraform.tfvars
