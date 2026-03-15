@@ -1,9 +1,5 @@
 terraform {
   required_providers {
-    tfe = {
-      source  = "hashicorp/tfe"
-      version = "~> 0.50"
-    }
     google = {
       source  = "hashicorp/google"
       version = "~> 5.0"
@@ -11,16 +7,12 @@ terraform {
   }
 
   cloud {
-    organization = "gopro-data-org"
+    organization = "gopro-data-project"
 
     workspaces {
-      name = "gopro-data-workspace"
+      name = "gopro-data-project"
     }
   }
-}
-
-provider "tfe" {
-  token = var.tfc_api_token
 }
 
 provider "google" {
