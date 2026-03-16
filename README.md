@@ -28,7 +28,7 @@ GoPro .mp4 upload
 | File Storage    | Google Cloud Storage (GCS)  | Two buckets: videos and raw telemetry      |
 | Triggering      | Cloud Run Function          | Calls Airflow REST API on GCS finalize     |
 | Orchestration   | Apache Airflow (Dockerized) | Runs locally via Docker Compose            |
-| GPMF Extraction | py-gpmf-parser              | PythonOperator, no custom Docker image     |
+| GPMF Extraction | py-gpmf-parser              | PythonOperator, compiled into custom Airflow image |
 | Data Warehouse  | Google BigQuery             | Hosts all three medallion layers           |
 | Transformation  | dbt-bigquery + Cosmos       | Cosmos exposes dbt models as Airflow tasks |
 | Visualization   | Tableau Public              | Fed via CSV export from BigQuery Gold      |
@@ -86,7 +86,7 @@ gopro-data-project/
 ## Key Design Decisions
 
 - **ELT not ETL**: Raw data lands in BigQuery first, dbt transforms inside the warehouse
-- **No Artifact Registry**: py-gpmf-parser runs natively in Airflow's Python environment, eliminating the need for a custom Docker image and container registry
+- **No Artifact Registry**: The custom Airflow image is built and run locally via Docker Compose, eliminating the need for a remote container registry
 - **Cloud Run Function over Pub/Sub**: Direct GCS → Cloud Run Function → Airflow REST API call removes an unnecessary intermediate messaging layer
 - **Cosmos for dbt orchestration**: Exposes each dbt model as an individual Airflow task for granular visibility and retry control
 - **Tableau Public**: Dashboard fed via CSV export from BigQuery Gold layer; live connection not available on free tier but acceptable at this project's cadence

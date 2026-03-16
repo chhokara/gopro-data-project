@@ -1,7 +1,8 @@
 version: "3.8"
 
 x-airflow-common: &airflow-common
-  image: apache/airflow:2.10.1
+  build: .
+  image: gopro-airflow:latest
   environment: &airflow-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
@@ -11,11 +12,6 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__DAG_RUN_CONF_OVERRIDES_PARAMS: "true"
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__DATABASE__LOAD_DEFAULT_CONNECTIONS: "false"
-    _PIP_ADDITIONAL_REQUIREMENTS: >-
-      apache-airflow-providers-google
-      astronomer-cosmos
-      dbt-bigquery
-      py-gpmf-parser
     GOOGLE_APPLICATION_CREDENTIALS: /keys/gcp-key.json
   volumes:
     - ./dags:/opt/airflow/dags
