@@ -7,8 +7,6 @@ locals {
     "iam.googleapis.com",
   ]
 
-  project_id = "gopro-data-project"
-
   buckets = {
     raw = {
       name          = "gopro-raw-data-bucket"
@@ -25,7 +23,7 @@ locals {
 
 resource "google_project_service" "required_services" {
   for_each = toset(local.required_services)
-  project  = local.project_id
+  project  = var.gcp_project_id
   service  = each.key
 
   disable_dependent_services = true
@@ -36,7 +34,7 @@ module "buckets" {
   for_each = local.buckets
 
   name              = each.value.name
-  project_id        = local.project_id
+  project_id        = var.gcp_project_id
   autoclass_enabled = true
   lifecycle_rules = [
     {
@@ -62,11 +60,11 @@ module "buckets" {
 resource "google_service_account" "airflow_orchestrator" {
   account_id   = "airflow-orchestrator"
   display_name = "Airflow Orchestrator Service Account"
-  project      = local.project_id
+  project      = var.gcp_project_id
 }
 
 resource "google_project_iam_member" "airflow_gcs" {
-  project = local.project_id
+  project = var.gcp_project_id
   role    = "roles/storage.objectAdmin"
   member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
 }
