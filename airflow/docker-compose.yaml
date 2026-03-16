@@ -5,20 +5,21 @@ x-airflow-common: &airflow-common
   environment: &airflow-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-    AIRFLOW__CORE__FERNET_KEY: "Pjs4zR5iEyF_y71d0UxHl2PT-oYq9xvWehflqSZ_l7U="
+    AIRFLOW__CORE__FERNET_KEY: "${AIRFLOW__CORE__FERNET_KEY}"
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
     AIRFLOW__CORE__DAG_CONCURRENCY: "8"
-    AIRFLOW__WEBSERVER__RBAC: "true"
+    AIRFLOW__CORE__DAG_RUN_CONF_OVERRIDES_PARAMS: "true"
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__DATABASE__LOAD_DEFAULT_CONNECTIONS: "false"
-    AIRFLOW__CORE__DAG_RUN_CONF_OVERRIDES_PARAMS: "true"
-    _PIP_ADDITIONAL_REQUIREMENTS: "apache-airflow-providers-google"
+    _PIP_ADDITIONAL_REQUIREMENTS: >-
+      apache-airflow-providers-google
+      astronomer-cosmos
+      dbt-bigquery
+      py-gpmf-parser
     GOOGLE_APPLICATION_CREDENTIALS: /keys/gcp-key.json
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
-    - ./plugins:/opt/airflow/plugins
-    - ./config:/opt/airflow/config
     - ./gcp-key.json:/keys/gcp-key.json:ro
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
