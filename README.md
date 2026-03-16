@@ -1,30 +1,107 @@
-# GoPro Telemetry Analysis
+# GoPro Telemetry Pipeline
 
-## Project Overview
-
-This project implements a fully serverless data pipeline on Google Cloud Platform (GCP) to extract and visualize GPMF telemetry from GoPro videos. When a raw .mp4 file is uploaded to a Google Cloud Storage (GCS) bucket, a Storage Object Finalize event publishes a message to Pub/Sub. A self-hosted Airflow instance (running in Docker) consumes this message to trigger a custom ETL workflow using a containerized GoPro parser stored in Artifact Registry. The workflow extracts embedded GPS, accelerometer, and gyroscope streams and writes the processed outputs to a curated GCS bucket. These curated datasets are then loaded into BigQuery for scalable analytics. Grafana connects directly to BigQuery to provide rich, time-series dashboards for insights into speed, movement, and overall performance. The entire system is provisioned with Terraform, creating a cost-efficient, event-driven, and easily extensible architecture for future analytics and visualization enhancements.
+An end-to-end ELT data pipeline on Google Cloud Platform (GCP) that extracts telemetry from GoPro .mp4 files and surfaces insights via Tableau dashboards. When a raw .mp4 file is uploaded to GCS, it triggers an Airflow DAG that extracts embedded GPMF telemetry (GPS, accelerometer, gyroscope), loads the raw data into BigQuery, then runs dbt transformations to produce clean, aggregated tables for Tableau.
 
 ## System Architecture
 
 ![System Architecture](assets/gcp-v3.png)
 
-## Technologies
+## Pipeline Flow
 
-- GoPro (GPMF) – Raw video + sensor telemetry
-- GCS – Raw and curated data storage
-- Pub/Sub – Notifications on new video uploads
-- Airflow (Dockerized) – ETL orchestration
-- Artifact Registry – ETL container storage
-- Docker – Containerized ETL environment
-- BigQuery – Telemetry analytics
-- Grafana – BigQuery-powered dashboards
-- Terraform – IaC for all GCP resources
+```
+GoPro .mp4 upload
+  -> GCS Videos Bucket          (raw file landing zone)
+  -> Cloud Run Function          (triggered by GCS Object Finalize event)
+  -> Airflow DAG (Dockerized)    (orchestrates all downstream steps)
+  -> py-gpmf-parser              (PythonOperator, extracts telemetry from .mp4)
+  -> GCS Raw Telemetry Bucket    (extracted Parquet files, one per stream)
+  -> BigQuery Load               (GCS -> BQ raw dataset)
+  -> dbt (via Astronomer Cosmos) (transforms data through medallion layers)
+  -> Tableau Public              (connects to Gold mart tables via CSV export)
+```
 
-## Triggering the manual extract DAG with inputs
+## Technology Stack
 
-The `gopro_gpmf_extract_manual` DAG now exposes typed `params`, so the Airflow UI shows an input form when you trigger it. From the DAG’s Grid view, click **Trigger DAG w/ config**, fill in:
+| Component       | Tool                        | Notes                                      |
+| --------------- | --------------------------- | ------------------------------------------ |
+| Cloud Platform  | Google Cloud Platform (GCP) |                                            |
+| File Storage    | Google Cloud Storage (GCS)  | Two buckets: videos and raw telemetry      |
+| Triggering      | Cloud Run Function          | Calls Airflow REST API on GCS finalize     |
+| Orchestration   | Apache Airflow (Dockerized) | Runs locally via Docker Compose            |
+| GPMF Extraction | py-gpmf-parser              | PythonOperator, no custom Docker image     |
+| Data Warehouse  | Google BigQuery             | Hosts all three medallion layers           |
+| Transformation  | dbt-bigquery + Cosmos       | Cosmos exposes dbt models as Airflow tasks |
+| Visualization   | Tableau Public              | Fed via CSV export from BigQuery Gold      |
+| IaC             | Terraform (GCP provider)    | Provisions all GCP resources               |
 
-- `bucket`: GCS bucket that holds the uploaded file (defaults to `gopro-raw-data-bucket`)
-- `object_name`: Path to the existing GoPro file inside that bucket (required)
+## Medallion Architecture
 
-Those values are passed to Cloud Run as environment variables `RAW_BUCKET` and `OBJECT_NAME` for the extraction job.
+All three layers live in BigQuery as separate datasets.
+
+### Bronze — `raw.*`
+
+Raw ingested rows, no transformations. Immutable historical record.
+
+- `raw.telemetry_samples`
+
+### Silver — `intermediate.*`
+
+Kimball dimensional model. Cleaned, typed, deduplicated.
+
+- `intermediate.fact_telemetry_sample` — one row per sensor reading; grain is one sample per timestamp per session
+- `intermediate.dim_session` — one row per GoPro recording (filename, start time, duration, activity type)
+- `intermediate.dim_date` — pre-populated date spine with calendar attributes
+
+### Gold — `mart.*`
+
+Aggregated, BI-ready tables. Tableau reads from these.
+
+- `mart.session_summary` — one row per session (max speed, total distance, elevation gain, duration)
+- `mart.speed_over_time` — time-series speed per session
+- `mart.gps_trace` — lat/lon per session for map visualizations
+
+## Data Quality
+
+dbt schema tests are declared at each layer:
+
+- `not_null` and `unique` on primary keys
+- `accepted_values` on categorical fields
+- `relationships` between fact and dimension tables
+- Airflow alerts on dbt test failures
+
+## Repository Structure
+
+```
+gopro-data-project/
+  airflow/          # DAG definitions, Docker Compose
+  dbt/              # dbt project (models, schema tests, sources)
+    models/
+      bronze/
+      silver/
+      gold/
+  terraform/        # all GCP infrastructure as code
+  .github/          # CI workflows
+```
+
+## Key Design Decisions
+
+- **ELT not ETL**: Raw data lands in BigQuery first, dbt transforms inside the warehouse
+- **No Artifact Registry**: py-gpmf-parser runs natively in Airflow's Python environment, eliminating the need for a custom Docker image and container registry
+- **Cloud Run Function over Pub/Sub**: Direct GCS → Cloud Run Function → Airflow REST API call removes an unnecessary intermediate messaging layer
+- **Cosmos for dbt orchestration**: Exposes each dbt model as an individual Airflow task for granular visibility and retry control
+- **Tableau Public**: Dashboard fed via CSV export from BigQuery Gold layer; live connection not available on free tier but acceptable at this project's cadence
+
+## Telemetry Streams
+
+| Stream        | Fields                               |
+| ------------- | ------------------------------------ |
+| GPS           | latitude, longitude, altitude, speed |
+| Accelerometer | x, y, z acceleration                 |
+| Gyroscope     | x, y, z rotation                     |
+
+## Infrastructure (Terraform-managed)
+
+- GCS buckets (videos, raw telemetry) with lifecycle policies
+- BigQuery datasets (raw, intermediate, mart) with schema definitions
+- Cloud Run Function with GCS event trigger binding
+- IAM service accounts with least-privilege role assignments
