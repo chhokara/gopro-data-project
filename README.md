@@ -104,4 +104,4 @@ gopro-data-project/
 - GCS buckets (videos, raw telemetry) with lifecycle policies
 - BigQuery datasets (raw, intermediate, mart) with schema definitions
 - Cloud Run Function with GCS event trigger binding
-- IAM service accounts with least-privilege role assignments
+- IAM service accounts with bucket-scoped least-privilege role assignments

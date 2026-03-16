@@ -64,8 +64,14 @@ resource "google_service_account" "airflow_orchestrator" {
   project      = var.gcp_project_id
 }
 
-resource "google_project_iam_member" "airflow_gcs" {
-  project = var.gcp_project_id
-  role    = "roles/storage.objectAdmin"
-  member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+resource "google_storage_bucket_iam_member" "airflow_raw" {
+  bucket = module.buckets["raw"].name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
+
+resource "google_storage_bucket_iam_member" "airflow_curated" {
+  bucket = module.buckets["curated"].name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
 }
