@@ -6,6 +6,10 @@ locals {
     "bigquery.googleapis.com",
     "iamcredentials.googleapis.com",
     "iam.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "run.googleapis.com",
+    "eventarc.googleapis.com",
+    "cloudbuild.googleapis.com",
   ]
 
   buckets = {
@@ -75,3 +79,24 @@ resource "google_storage_bucket_iam_member" "airflow_curated" {
   role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
 }
+
+# module "gopro_trigger" {
+#   source = "./modules/cloud-run-function"
+
+#   project_id     = var.gcp_project_id
+#   region         = var.gcp_region
+#   name           = "gopro-pipeline-trigger"
+#   runtime        = "python312"
+#   entry_point    = "trigger_pipeline"
+#   source_dir     = "${path.module}/../cloud_run_function"
+#   trigger_bucket = module.buckets["raw"].name
+
+#   environment_variables = {
+#     AIRFLOW_DAG_ID   = "gopro_pipeline"
+#     AIRFLOW_URL      = var.airflow_url
+#     AIRFLOW_USERNAME = var.airflow_username
+#     AIRFLOW_PASSWORD = var.airflow_password
+#   }
+
+#   depends_on = [google_project_service.required_services]
+# }

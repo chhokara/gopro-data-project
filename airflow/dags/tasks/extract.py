@@ -17,12 +17,14 @@ def extract_telemetry(**context):
     streams using py-gpmf-parser. Writes one Parquet file per stream
     to the curated GCS bucket.
     """
-    params = context["params"]
-    bucket_name = params["bucket"]
-    object_name = params["object_name"]
+    # dag_run.conf is set when the DAG is triggered externally (e.g. via REST API
+    # or Pub/Sub). context["params"] is used as a fallback for manual UI triggers.
+    conf = context["dag_run"].conf or {}
+    bucket_name = conf.get("bucket") or context["params"]["bucket"]
+    object_name = conf.get("object_name") or context["params"]["object_name"]
 
     if not object_name:
-        raise ValueError("object_name param is required (e.g. 'GH010001.MP4')")
+        raise ValueError("object_name is required — pass it via dag_run.conf or the Trigger DAG UI")
 
     # Derive a session ID from the filename (strip extension)
     session_id = os.path.splitext(os.path.basename(object_name))[0]
