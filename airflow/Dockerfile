@@ -11,8 +11,10 @@ RUN apt-get update && apt-get install -y \
 
 USER airflow
 
-# Install Airflow providers and dbt packages together
+# Install Airflow providers and dbt packages using the official Airflow constraints
+# file to avoid pip dependency resolution conflicts
 RUN pip install --no-cache-dir \
+    --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.10.1/constraints-3.12.txt" \
     apache-airflow-providers-google \
     astronomer-cosmos \
     dbt-bigquery
