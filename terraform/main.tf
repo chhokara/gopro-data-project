@@ -24,6 +24,13 @@ locals {
       layer         = "curated"
     }
   }
+
+  datasets = {
+    raw = {
+      dataset_id  = "raw"
+      description = "Bronze layer: raw telemetry loaded from GCS Parquet files."
+    }
+  }
 }
 
 resource "google_project_service" "required_services" {
@@ -78,6 +85,33 @@ resource "google_storage_bucket_iam_member" "airflow_curated" {
   bucket = module.buckets["curated"].name
   role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
+
+module "datasets" {
+  source   = "./modules/bigquery"
+  for_each = local.datasets
+
+  project_id                 = var.gcp_project_id
+  dataset_id                 = each.value.dataset_id
+  description                = each.value.description
+  delete_contents_on_destroy = true
+
+  depends_on = [google_project_service.required_services]
+}
+
+resource "google_bigquery_dataset_iam_member" "airflow_dataset_editor" {
+  for_each = module.datasets
+
+  project    = var.gcp_project_id
+  dataset_id = each.value.dataset_id
+  role       = "roles/bigquery.dataEditor"
+  member     = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
+}
+
+resource "google_project_iam_member" "airflow_bq_job_user" {
+  project = var.gcp_project_id
+  role    = "roles/bigquery.jobUser"
+  member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
 }
 
 # module "gopro_trigger" {
