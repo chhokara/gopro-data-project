@@ -11,7 +11,7 @@ def load_to_bigquery(**context):
     BigQuery raw dataset (raw.gps5, raw.accl, raw.gyro).
     """
     session_id = context["ti"].xcom_pull(
-        task_ids="extract_data", key="session_id")
+        task_ids="extract_telemetry", key="session_id")
     log.info("Loading session %s into BigQuery...", session_id)
 
     bq_client = bigquery.Client(project=PROJECT_ID)
@@ -32,7 +32,11 @@ def load_to_bigquery(**context):
             autodetect=True
         )
 
-        load_job = bq_client.load_table_from_uri(
-            uri, table_ref, job_config=job_config)
-        load_job.result()  # Wait for the job to complete
-        log.info("Loaded %s -> %s", uri, table_ref)
+        try:
+            load_job = bq_client.load_table_from_uri(
+                uri, table_ref, job_config=job_config)
+            load_job.result()
+            log.info("Loaded %s -> %s", uri, table_ref)
+        except Exception as e:
+            log.warning(
+                "Skipping %s — file not found or load failed: %s", uri, e)
