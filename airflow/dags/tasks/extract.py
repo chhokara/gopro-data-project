@@ -50,6 +50,10 @@ def extract_telemetry(**context):
         for stream_key, columns in STREAMS.items():
             data, timestamps = extractor.extract_data(stream_key)
 
+            if len(data) == 0:
+                log.warning("No data found for stream %s — skipping", stream_key)
+                continue
+
             df = pd.DataFrame(data, columns=columns)
             df.insert(0, "timestamp_s", timestamps)
             df.insert(0, "session_id", session_id)
