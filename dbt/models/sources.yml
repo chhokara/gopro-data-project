@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: raw
+    database: gopro-data-project
+    schema: raw
+    tables:
+      - name: accl
+        description: "Raw accelerometer data extracted from GoPro .mp4 files."
+      - name: gyro
+        description: "Raw gyroscope data extracted from GoPro .mp4 files."
+      - name: gps5
+        description: "Raw GPS data extracted from GoPro .mp4 files."

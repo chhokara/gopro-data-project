@@ -1,0 +1,11 @@
+gopro_data:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: gopro-data-project
+      dataset: raw
+      keyfile: /keys/gcp-key.json
+      location: US
+      threads: 1
