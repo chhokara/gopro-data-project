@@ -33,5 +33,5 @@ from source
         cast(null as float64) as speed_3d_ms,
         cast(null as float64) as speed_2d_kmh,
         cast(null as float64) as speed_3d_kmh
-    where false
+    limit 0
 {% endif %}

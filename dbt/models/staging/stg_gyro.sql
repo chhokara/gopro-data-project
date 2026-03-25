@@ -31,5 +31,5 @@ from source
         cast(null as float64) as gyro_y_rads,
         cast(null as float64) as gyro_z_rads,
         cast(null as float64) as gyro_magnitude_rads
-    where false
+    limit 0
 {% endif %}

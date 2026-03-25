@@ -31,5 +31,5 @@ from source
         cast(null as float64) as accel_y_ms2,
         cast(null as float64) as accel_z_ms2,
         cast(null as float64) as accel_magnitude_ms2
-    where false
+    limit 0
 {% endif %}
