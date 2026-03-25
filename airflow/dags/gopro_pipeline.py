@@ -2,9 +2,9 @@ from datetime import datetime, timedelta
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from cosmos import DbtTaskGroup, ExecutionConfig, ProfileConfig, ProjectConfig
 
 from tasks.constants import RAW_BUCKET
-from tasks.dbt_run import run_dbt
 from tasks.extract import extract_telemetry
 from tasks.load import load_to_bigquery
 
@@ -13,6 +13,16 @@ default_args = {
     "retries": 1,
     "retry_delay": timedelta(minutes=1),
 }
+
+profile_config = ProfileConfig(
+    profile_name="gopro_data",
+    target_name="dev",
+    profiles_yml_filepath="/opt/airflow/dbt/profiles.yml",
+)
+
+project_config = ProjectConfig(
+    dbt_project_path="/opt/airflow/dbt",
+)
 
 with DAG(
     dag_id="gopro_pipeline",
@@ -37,9 +47,13 @@ with DAG(
         python_callable=load_to_bigquery,
     )
 
-    dbt = PythonOperator(
-        task_id="run_dbt",
-        python_callable=run_dbt,
+    dbt = DbtTaskGroup(
+        group_id="run_dbt",
+        project_config=project_config,
+        profile_config=profile_config,
+        execution_config=ExecutionConfig(
+            dbt_executable_path="/home/airflow/.local/bin/dbt",
+        ),
     )
 
     extract >> load >> dbt
