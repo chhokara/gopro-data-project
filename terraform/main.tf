@@ -30,6 +30,18 @@ locals {
       dataset_id  = "raw"
       description = "Bronze layer: raw telemetry loaded from GCS Parquet files."
     }
+    staging = {
+      dataset_id  = "staging"
+      description = "Silver layer: cleaned and typed staging views produced by dbt."
+    }
+    intermediate = {
+      dataset_id  = "intermediate"
+      description = "Silver layer: joined / enriched intermediate models produced by dbt."
+    }
+    marts = {
+      dataset_id  = "marts"
+      description = "Gold layer: business-ready mart tables produced by dbt."
+    }
   }
 }
 

@@ -26,6 +26,15 @@ def load_to_bigquery(**context):
         uri = f"gs://{CURATED_BUCKET}/{session_id}/{stream_key.lower()}.parquet"
         table_ref = f"{PROJECT_ID}.{BQ_RAW_DATASET}.{table_suffix}"
 
+        # Delete existing rows for this session so re-runs are idempotent
+        try:
+            bq_client.query(
+                f"DELETE FROM `{table_ref}` WHERE session_id = '{session_id}'"
+            ).result()
+            log.info("Deleted existing rows for session %s from %s", session_id, table_ref)
+        except Exception as e:
+            log.info("No existing rows to delete from %s (table may not exist yet): %s", table_ref, e)
+
         job_config = bigquery.LoadJobConfig(
             source_format=bigquery.SourceFormat.PARQUET,
             write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
