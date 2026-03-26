@@ -126,6 +126,18 @@ resource "google_project_iam_member" "airflow_bq_job_user" {
   member  = "serviceAccount:${google_service_account.airflow_orchestrator.email}"
 }
 
+resource "google_project_iam_member" "analyst_bq_viewer" {
+  project = var.gcp_project_id
+  role    = "roles/bigquery.dataViewer"
+  member  = "user:chhokara@gmail.com"
+}
+
+resource "google_project_iam_member" "analyst_bq_job_user" {
+  project = var.gcp_project_id
+  role    = "roles/bigquery.jobUser"
+  member  = "user:chhokara@gmail.com"
+}
+
 # module "gopro_trigger" {
 #   source = "./modules/cloud-run-function"
 
