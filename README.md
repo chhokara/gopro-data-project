@@ -83,6 +83,43 @@ gopro-data-project/
   .github/          # CI workflows
 ```
 
+## LLM Integration
+
+A natural language query interface built on top of the BigQuery marts layer using the Claude API and Streamlit. Ask plain-English questions about your GoPro telemetry data — Claude converts the question into a BigQuery SQL query, executes it, then interprets the results back into a plain-English answer.
+
+![GoPro Session Query](assets/streamlit-query.png)
+
+### How it works
+
+```
+User question
+  -> Claude API (NL -> SQL, using mart schema as context)
+  -> BigQuery marts (query execution)
+  -> Claude API (results -> plain English answer)
+  -> Streamlit UI (displays generated SQL, raw results, and answer)
+```
+
+### Code structure
+
+```
+streamlit/
+  app.py              # Streamlit UI
+  src/
+    prompts.py        # System prompts for SQL generation and answer generation
+    llm.py            # Claude API calls
+    bigquery.py       # BigQuery query execution
+  Dockerfile
+  requirements.txt
+```
+
+### Example
+
+> **Question:** What was the peak acceleration for session GX10008?
+>
+> **Generated SQL:** `SELECT peak_accel_ms2 FROM gopro-data-project.marts.mart_session_summary WHERE session_id = 'GX010008'`
+>
+> **Answer:** Your peak acceleration during session GX10008 was **80.94 m/s²**, which is roughly **8.25 G's** — more than double what you'd feel on a roller coaster.
+
 ## Key Design Decisions
 
 - **ELT not ETL**: Raw data lands in BigQuery first, dbt transforms inside the warehouse
