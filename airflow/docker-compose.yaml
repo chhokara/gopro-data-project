@@ -59,5 +59,16 @@ services:
       --email admin@example.com \
       --password admin"
 
+  streamlit:
+    build:
+      context: ../streamlit
+    ports:
+      - "8501:8501"
+    environment:
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
+      GOOGLE_APPLICATION_CREDENTIALS: /keys/gcp-key.json
+    volumes:
+      - ./keys/airflow-orchestrator.json:/keys/gcp-key.json:ro
+
 volumes:
   postgres-data:
