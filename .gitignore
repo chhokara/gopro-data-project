@@ -10,3 +10,7 @@ airflow/keys/
 airflow/.env
 airflow/logs/
 terraform.tfvars
+CLAUDE.md
+.DS_Store
+**/__pycache__/
+**/*.pyc

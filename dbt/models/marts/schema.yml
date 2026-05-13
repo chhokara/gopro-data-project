@@ -1,0 +1,74 @@
+version: 2
+
+models:
+  - name: mart_session_summary
+    description: >
+      One row per GoPro recording session. Aggregates telemetry across the full
+      session to produce summary metrics for acceleration and rotation. Use this
+      table to compare sessions, find peaks, or rank recordings by intensity.
+    columns:
+      - name: session_id
+        description: >
+          Unique identifier for the recording session, derived from the GoPro
+          filename (e.g. 'GX010008'). Foreign key to mart_motion_timeline.
+        data_type: STRING
+      - name: duration_s
+        description: >
+          Total recording duration in seconds, calculated as the difference
+          between the last and first telemetry timestamp in the session.
+        data_type: FLOAT
+      - name: total_samples
+        description: >
+          Total number of telemetry samples recorded during the session.
+          Higher values indicate longer or higher-frequency recordings.
+        data_type: INTEGER
+      - name: peak_accel_ms2
+        description: >
+          Maximum acceleration magnitude (m/s²) observed across all samples in
+          the session. Derived from the 3-axis accelerometer via sqrt(x²+y²+z²).
+          Useful for finding the most intense moment of movement.
+        data_type: FLOAT
+      - name: avg_accel_ms2
+        description: >
+          Mean acceleration magnitude (m/s²) across all samples in the session.
+          Indicates the average level of physical activity throughout the recording.
+        data_type: FLOAT
+      - name: peak_gyro_rads
+        description: >
+          Maximum gyroscope magnitude (rad/s) observed across all samples in the
+          session. Derived from the 3-axis gyroscope via sqrt(x²+y²+z²). Captures
+          the sharpest rotational movement in the recording.
+        data_type: FLOAT
+      - name: avg_gyro_rads
+        description: >
+          Mean gyroscope magnitude (rad/s) across all samples in the session.
+          Indicates the average rotational activity level throughout the recording.
+        data_type: FLOAT
+
+  - name: mart_motion_timeline
+    description: >
+      Time-series telemetry for every sample in every GoPro recording session.
+      One row per timestamp. Use this table for time-based analysis: plotting
+      motion over time, finding when peak events occurred, or comparing activity
+      patterns within a single session.
+    columns:
+      - name: session_id
+        description: >
+          Unique identifier for the recording session. Foreign key to
+          mart_session_summary. Use to filter down to a single session.
+        data_type: STRING
+      - name: timestamp_s
+        description: >
+          Time elapsed in seconds from the start of the session when this sample
+          was recorded. Monotonically increasing within each session.
+        data_type: FLOAT
+      - name: accel_magnitude_ms2
+        description: >
+          Acceleration magnitude (m/s²) at this specific timestamp. Derived from
+          sqrt(x²+y²+z²) of the 3-axis accelerometer reading.
+        data_type: FLOAT
+      - name: gyro_magnitude_rads
+        description: >
+          Gyroscope magnitude (rad/s) at this specific timestamp. Derived from
+          sqrt(x²+y²+z²) of the 3-axis gyroscope reading.
+        data_type: FLOAT
