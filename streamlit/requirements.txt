@@ -1,4 +1,5 @@
 anthropic
+openai
 streamlit
 google-cloud-bigquery
 pandas
